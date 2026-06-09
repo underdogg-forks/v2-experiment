@@ -1,22 +1,25 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Filament\Pages;
 
 use App\Models\Company;
-use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 
-class SwitchCompany extends Component implements HasForms, HasTable
+class SwitchCompany extends Page implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
+
+    protected string $view = 'filament.pages.switch-company';
+
+    protected static ?string $title = 'Switch Company';
 
     public function table(Table $table): Table
     {
@@ -26,8 +29,8 @@ class SwitchCompany extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('name')
                     ->label('Company Name'),
             ])
-            ->recordActions([
-                Action::make('switch')
+            ->actions([
+                Tables\Actions\Action::make('switch')
                     ->label('Switch')
                     ->action(function (Company $record) {
                         session(['current_company_id' => $record->id]);
@@ -36,10 +39,5 @@ class SwitchCompany extends Component implements HasForms, HasTable
                     })
                     ->disabled(fn (Company $record) => $record->id === session('current_company_id')),
             ]);
-    }
-
-    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
-    {
-        return view('livewire.switch-company');
     }
 }

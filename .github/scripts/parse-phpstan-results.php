@@ -23,10 +23,12 @@ if ( ! file_exists($jsonFile)) {
 }
 
 $content = file_get_contents($jsonFile);
-$data    = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo "Error: Invalid JSON in '{$jsonFile}': " . json_last_error_msg() . "\n";
+try {
+    $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+} catch (JsonException $e) {
+    echo "Error: Invalid JSON in '{$jsonFile}': " . $e->getMessage() . "\n";
+    echo "Content snippet: " . substr(trim($content), 0, 200) . "...\n";
     exit(1);
 }
 

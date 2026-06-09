@@ -6,15 +6,17 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SwitchCompanyTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_switch_company()
+    #[Test]
+    public function it_can_switch_company(): void
     {
-        // Setup user and companies
+        /* Arrange */
         $user      = User::factory()->create(['user_rcc' => 'test']);
         $companies = Company::factory()->count(5)->sequence(fn ($seq) => ['search_code' => 'test' . $seq->index])->create();
         $user->companies()->attach($companies->pluck('id'));
@@ -25,11 +27,32 @@ class SwitchCompanyTest extends TestCase
         $initialCompany = $companies->first();
         session(['current_company_id' => $initialCompany->id]);
 
-        // We can test the Livewire component directly
-        Livewire::test(\App\Livewire\SwitchCompany::class)
-            ->callTableAction('switch', $companies->last())
-            ->assertRedirect(route('filament.company.pages.dashboard', ['tenant' => $companies->last()->search_code]));
+        /* Act */
+        $test = Livewire::test(\App\Filament\Pages\SwitchCompany::class)
+            ->callTableAction('switch', $companies->last());
 
+        /* Assert */
+        $test->assertRedirect(route('filament.company.pages.dashboard', ['tenant' => $companies->last()->search_code]));
         $this->assertEquals($companies->last()->id, session('current_company_id'));
+    }
+
+    #[Test]
+    public function it_disables_switch_action_for_current_company(): void
+    {
+        /* Arrange */
+        $user      = User::factory()->create(['user_rcc' => 'test']);
+        $companies = Company::factory()->count(5)->sequence(fn ($seq) => ['search_code' => 'test' . $seq->index])->create();
+        $user->companies()->attach($companies->pluck('id'));
+
+        $this->actingAs($user);
+
+        // Set initial company
+        $initialCompany = $companies->first();
+        session(['current_company_id' => $initialCompany->id]);
+
+        /* Act & Assert */
+        Livewire::test(\App\Filament\Pages\SwitchCompany::class)
+            ->assertActionDisabled('switch', $companies->first())
+            ->assertActionEnabled('switch', $companies->last());
     }
 }
