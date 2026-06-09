@@ -27,6 +27,7 @@ class CompanyPanelProvider extends PanelProvider
             ->default()
             ->id('company')
             ->path('company')
+            ->viteTheme('resources/css/filament/company/nord.css')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
