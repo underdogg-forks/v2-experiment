@@ -2,9 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasDefaultTenant;
+use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User.
@@ -48,7 +59,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Collection|Client[]     $clients
  * @property Collection|UserCustom[] $user_customs
  */
-class User extends Model
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasTenants, HasDefaultTenant
 {
     public $timestamps = false;
 
@@ -57,42 +68,16 @@ class User extends Model
     protected $primaryKey = 'user_id';
 
     protected $casts = [
-        'user_type'          => 'int',
-        'user_active'        => 'bool',
-        'user_date_created'  => 'datetime',
-        'user_date_modified' => 'datetime',
-        'user_all_clients'   => 'bool',
-        'user_gln'           => 'int',
+        'user_type'        => 'int',
+        'user_active'      => 'boolean',
+        'user_all_clients' => 'boolean',
+        'user_gln'         => 'int',
     ];
 
     protected $hidden = [
-        'user_password',
-        'user_passwordreset_token',
-    ];
-
-    protected $fillable = [
-        'user_type',
-        'user_active',
-        'user_date_created',
-        'user_date_modified',
-        'user_language',
-        'user_name',
-        'user_company',
-        'user_address_1',
-        'user_address_2',
-        'user_city',
-        'user_state',
-        'user_zip',
-        'user_country',
-        'user_invoicing_contact',
-        'user_phone',
-        'user_fax',
-        'user_mobile',
-        'user_email',
-        'user_password',
-        'user_web',
-        'user_vat_id',
-        'user_tax_code',
+        'password',
+        'user_password_confirmation',
+        'remember_token',
         'user_psalt',
         'user_all_clients',
         'user_passwordreset_token',
@@ -104,6 +89,19 @@ class User extends Model
         'user_gln',
         'user_rcc',
     ];
+
+    protected $guarded = [];
+
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Company::class,
+            'company_user',
+            'user_id',
+            'company_id',
+        )
+            ->using(CompanyUser::class);
+    }
 
     public function expenses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
@@ -129,5 +127,84 @@ class User extends Model
     public function user_customs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(UserCustom::class);
+    }
+
+    public function getCurrentCompanyId(): ?int
+    {
+        $companyId = session('current_company_id');
+
+        if ( ! $companyId) {
+            $companyId = $this->companies()->first()?->id;
+        }
+
+        return $companyId;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // SuperAdmin, Admin, Assistance can access any panel
+        if (
+            $this->hasRole(UserRole::SUPER_ADMIN->value)
+            || $this->hasRole(UserRole::ADMIN->value)
+            || $this->hasRole(UserRole::ASSIST->value)
+        ) {
+            return true;
+        }
+
+        // UserAdmin and User can only access the 'company' panel
+        if ($panel->getId() === 'company') {
+            return $this->hasRole(UserRole::CUSTOMER_ADMIN->value)
+                || $this->hasRole(UserRole::CUSTOMER->value);
+        }
+
+        // All other roles or panels not explicitly allowed
+        return false;
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return null;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(UserRole::SUPER_ADMIN->value);
+    }
+
+    /**
+     * Filament tenancy: return the user's default tenant (first company).
+     */
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->companies()->first();
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->getAttributeValue('user_name');
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->companies()->whereKey($tenant->getKey())->exists();
+    }
+
+    public function getTenants(Panel $panel): array|Collection
+    {
+        return $this->companies;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
     }
 }
