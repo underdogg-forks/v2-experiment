@@ -7,6 +7,13 @@
 language: en-US
 
 reviews:
+  # Only review PHP files; exclude markdown, lock files, and package manifests
+  path_filters:
+    - "**/*.php"
+    - "!**/*.md"
+    - "!**/package.json"
+    - "!**/yarn.lock"
+
   path_instructions:
     - path: "app/**"
       instructions: "Pay extra attention to this directory."
