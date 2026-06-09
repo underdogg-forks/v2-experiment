@@ -8,15 +8,43 @@ language: en-US
 
 reviews:
   # Only review PHP files; exclude markdown, lock files, and package manifests
+  # Explicitly ignored files (user-specified — do not remove unless instructed)
   path_filters:
     - "**/*.php"
     - "!**/*.md"
     - "!**/package.json"
     - "!**/yarn.lock"
+    # --- ignored files -----------------------------------------------------------
+    - "!.claude/skills/tailwindcss-development/SKILL.md"
+    - "!.coderabbit.yml"
+    - "!.env.example"
+    - "!.env.testing.example"
+    - "!.github/scripts/parse-phpstan-results.php"
+    - "!.github/workflows/phpstan.yml"
+    - "!.github/workflows/pint.yml"
+    - "!.gitignore"
+    - "!.mcp.json"
+    - "!CLAUDE.md"
+    - "!Makefile"
+    - "!env.example.txt"
+    - "!package.json"
+    - "!phpstan.neon"
+    - "!phpunit.xml"
+    - "!rector.php"
+    - "!resources/css/app.css"
+    - "!resources/css/filament/admin/nord.css"
+    - "!resources/css/filament/company/nord.css"
+    - "!resources/views/filament/company/widgets/switch-company-table.blade.php"
+    - "!resources/views/filament/pages/switch-company.blade.php"
+    - "!resources/views/livewire/switch-company.blade.php"
+    - "!storage/debugbar/.gitignore"
+    - "!tests/Feature/SwitchCompanyTest.php"
+    - "!vite.config.js"
+    # -----------------------------------------------------------------------------
 
   path_instructions:
     - path: "app/**"
-      instructions: "Pay extra attention to this directory."
+
 
   # Review tone — defines style of feedback
   # Options: assertive | chill | friendly | strict | concise | detailed
