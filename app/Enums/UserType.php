@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Enums;
+namespace App\Enums;
 
 enum UserType: int
 {
