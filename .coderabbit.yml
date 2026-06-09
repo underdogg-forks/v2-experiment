@@ -7,6 +7,10 @@
 language: en-US
 
 reviews:
+  path_instructions:
+    - path: "app/**"
+      instructions: "Pay extra attention to this directory."
+
   # Review tone — defines style of feedback
   # Options: assertive | chill | friendly | strict | concise | detailed
   profile: assertive
