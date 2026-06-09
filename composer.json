@@ -1,0 +1,108 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "invoiceplane/invoiceplane-v2",
+    "type": "project",
+    "description": "InvoicePlane v2.",
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
+    "license": "MIT",
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.3",
+        "filament/filament": "^5.6",
+        "internachi/modular": "^3.0",
+        "laravel/framework": "^12.61",
+        "maatwebsite/excel": "^3.1",
+        "modules/clients": "*",
+        "modules/core": "*",
+        "modules/expenses": "*",
+        "modules/invoices": "*",
+        "modules/payments": "*",
+        "modules/products": "*",
+        "modules/projects": "*",
+        "modules/quotes": "*",
+        "spatie/laravel-permission": "^8.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.3",
+        "brianium/paratest": "^7.20",
+        "driftingly/rector-laravel": "^2.5",
+        "fakerphp/faker": "^1.24",
+        "larastan/larastan": "^3.10",
+        "laravel/boost": "^2.4",
+        "laravel/pail": "^1.2",
+        "laravel/pao": "^1.1",
+        "laravel/pint": "^1.29",
+        "laravel/sail": "^1.62",
+        "laravel/tinker": ">=3.0.2",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.9",
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.4",
+        "reliese/laravel": "^1.4",
+        "roave/security-advisories": "dev-latest",
+        "thedoctor0/laravel-factory-generator": "^1.4",
+        "tyghaykal/laravel-seed-generator": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "aargh": "php artisan view:clear && php artisan config:clear && php artisan route:clear",
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "12.x-dev"
+        },
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "Modules/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}
