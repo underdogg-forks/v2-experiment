@@ -11,11 +11,15 @@ use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Class User.
@@ -61,6 +65,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasTenants, HasDefaultTenant
 {
+    use CanResetPassword;
+    use HasFactory;
+    use HasRoles;
+    use Notifiable;
+
     public $timestamps = false;
 
     protected $table = 'users';
@@ -182,16 +191,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return $this->companies()->first();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Factory
-    |--------------------------------------------------------------------------
-    */
-    protected static function newFactory(): Factory
-    {
-        return UserFactory::new();
-    }
-
     public function getFilamentAvatarUrl(): ?string
     {
         return null;
@@ -200,5 +199,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function getFilamentName(): string
     {
         return $this->user_name;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
     }
 }
