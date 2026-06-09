@@ -22,7 +22,7 @@ class CompanyPanelProvider extends PanelProvider
     {
         return $panel
             ->id('company')
-            ->path('company')
+            ->path('')
             ->viteTheme('resources/css/filament/company/nord.css')
             ->login(\App\Filament\Pages\Auth\Login::class)
             ->registration()

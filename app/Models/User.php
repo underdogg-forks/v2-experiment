@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use Carbon\Carbon;
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -122,5 +127,78 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function user_customs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(UserCustom::class);
+    }
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'user_name';
+    }
+
+    public function getAuthPassword(): string
+    {
+        return 'user_password';
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // SuperAdmin, Admin, Assistance can access any panel
+        if (
+            $this->hasRole(UserRole::SUPER_ADMIN->value)
+            || $this->hasRole(UserRole::ADMIN->value)
+            || $this->hasRole(UserRole::ASSIST->value)
+        ) {
+            return true;
+        }
+
+        // UserAdmin and User can only access the 'company' panel
+        if ($panel->getId() === 'company') {
+            return $this->hasRole(UserRole::CUSTOMER_ADMIN->value)
+                || $this->hasRole(UserRole::CUSTOMER->value);
+        }
+
+        // All other roles or panels not explicitly allowed
+        return false;
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->companies()->whereKey($tenant->getKey())->exists();
+    }
+
+    public function getTenants(Panel $panel): array|Collection
+    {
+        return $this->companies;
+    }
+
+    /**
+     * Filament tenancy: return the user's default tenant (first company).
+     */
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->companies()->first();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return null;
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->user_name;
     }
 }
