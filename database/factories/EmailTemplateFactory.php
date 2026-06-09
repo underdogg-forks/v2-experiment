@@ -27,6 +27,7 @@ final class EmailTemplateFactory extends Factory
     public function definition(): array
     {
         return [
+            'company_id'                  => \App\Models\Company::factory(),
             'email_template_title'        => fake()->optional()->text,
             'email_template_type'         => fake()->optional()->word,
             'email_template_body'         => fake()->word,

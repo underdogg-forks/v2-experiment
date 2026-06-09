@@ -27,16 +27,14 @@ final class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id'           => \App\Models\Company::factory(),
-            'project_id'           => fake()->randomNumber(),
-            'task_name'            => fake()->optional()->word,
-            'task_description'     => fake()->word,
-            'task_price'           => fake()->optional()->randomFloat(2, 0, 999999999999999999),
-            'task_finish_date'     => fake()->date(),
-            'task_status'          => fake()->randomNumber(1),
-            'tax_rate_id'          => fake()->randomNumber(),
-            'project_project_id'   => \App\Models\Project::factory(),
-            'tax_rate_tax_rate_id' => \App\Models\TaxRate::factory(),
+            'company_id'       => \App\Models\Company::factory(),
+            'project_id'       => fake()->randomNumber(),
+            'task_name'        => fake()->optional()->word,
+            'task_description' => fake()->word,
+            'task_price'       => fake()->optional()->randomFloat(2, 0, 999999999999999999),
+            'task_finish_date' => fake()->date(),
+            'task_status'      => fake()->randomNumber(1),
+            'tax_rate_id'      => \App\Models\TaxRate::factory(),
         ];
     }
 }

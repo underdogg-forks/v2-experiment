@@ -28,8 +28,8 @@ final class QuoteItemFactory extends Factory
     {
         return [
             'company_id'           => \App\Models\Company::factory(),
-            'quote_id'             => fake()->randomNumber(),
-            'tax_rate_id'          => fake()->randomNumber(),
+            'quote_id'             => \App\Models\Quote::factory(),
+            'tax_rate_id'          => \App\Models\TaxRate::factory(),
             'item_product_id'      => \App\Models\Product::factory(),
             'item_date_added'      => fake()->date(),
             'item_name'            => fake()->optional()->word,
@@ -40,8 +40,6 @@ final class QuoteItemFactory extends Factory
             'item_order'           => fake()->randomNumber(),
             'item_product_unit'    => fake()->optional()->word,
             'item_product_unit_id' => \App\Models\Unit::factory(),
-            'quote_quote_id'       => \App\Models\Quote::factory(),
-            'tax_rate_tax_rate_id' => \App\Models\TaxRate::factory(),
         ];
     }
 }

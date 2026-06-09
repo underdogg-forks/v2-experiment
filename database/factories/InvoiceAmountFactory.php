@@ -28,7 +28,7 @@ final class InvoiceAmountFactory extends Factory
     {
         return [
             'company_id'             => \App\Models\Company::factory(),
-            'invoice_id'             => fake()->randomNumber(),
+            'invoice_id'             => \App\Models\Invoice::factory(),
             'invoice_sign'           => fake()->word,
             'invoice_item_subtotal'  => fake()->optional()->randomFloat(2, 0, 999999999999999999),
             'invoice_item_tax_total' => fake()->optional()->randomFloat(2, 0, 999999999999999999),

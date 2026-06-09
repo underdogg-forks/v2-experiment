@@ -28,12 +28,10 @@ final class InvoiceTaxRateFactory extends Factory
     {
         return [
             'company_id'              => \App\Models\Company::factory(),
-            'invoice_id'              => fake()->randomNumber(),
-            'tax_rate_id'             => fake()->randomNumber(),
+            'invoice_id'              => \App\Models\Invoice::factory(),
+            'tax_rate_id'             => \App\Models\TaxRate::factory(),
             'include_item_tax'        => fake()->randomNumber(1),
             'invoice_tax_rate_amount' => fake()->randomFloat(2, 0, 99999999),
-            'invoice_invoice_id'      => \App\Models\Invoice::factory(),
-            'tax_rate_tax_rate_id'    => \App\Models\TaxRate::factory(),
         ];
     }
 }

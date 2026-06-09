@@ -28,12 +28,10 @@ final class QuoteTaxRateFactory extends Factory
     {
         return [
             'company_id'            => \App\Models\Company::factory(),
-            'quote_id'              => fake()->randomNumber(),
-            'tax_rate_id'           => fake()->randomNumber(),
+            'quote_id'              => \App\Models\Quote::factory(),
+            'tax_rate_id'           => \App\Models\TaxRate::factory(),
             'include_item_tax'      => fake()->randomNumber(1),
             'quote_tax_rate_amount' => fake()->optional()->randomFloat(2, 0, 999999999999999999),
-            'quote_quote_id'        => \App\Models\Quote::factory(),
-            'tax_rate_tax_rate_id'  => \App\Models\TaxRate::factory(),
         ];
     }
 }

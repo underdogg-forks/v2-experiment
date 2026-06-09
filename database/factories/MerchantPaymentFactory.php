@@ -28,7 +28,7 @@ final class MerchantPaymentFactory extends Factory
     {
         return [
             'driver'         => fake()->word,
-            'payment_id'     => fake()->randomNumber(),
+            'payment_id'     => \App\Models\Payment::factory(),
             'merchant_key'   => fake()->word,
             'merchant_value' => fake()->word,
         ];

@@ -28,7 +28,7 @@ final class MerchantClientFactory extends Factory
     {
         return [
             'driver'         => fake()->word,
-            'client_id'      => fake()->randomNumber(),
+            'client_id'      => \App\Models\Client::factory(),
             'merchant_key'   => fake()->word,
             'merchant_value' => fake()->word,
         ];
