@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Auth;
 
-use \Filament\Auth\Pages\Login as FilamentLogin;
+use Filament\Auth\Pages\Login as FilamentLogin;
 
 class Login extends FilamentLogin
 {
