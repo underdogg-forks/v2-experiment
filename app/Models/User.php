@@ -2,18 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\UserRole;
 use Carbon\Carbon;
-use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
-use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
