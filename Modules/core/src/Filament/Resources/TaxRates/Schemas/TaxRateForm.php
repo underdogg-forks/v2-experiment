@@ -14,7 +14,6 @@ class TaxRateForm
             ->components([
                 Textarea::make('tax_rate_name')
                     ->required()
-                    ->default(null)
                     ->columnSpanFull(),
                 TextInput::make('tax_rate_percent')
                     ->required()

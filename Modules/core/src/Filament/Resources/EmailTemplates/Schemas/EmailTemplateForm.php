@@ -14,11 +14,9 @@ class EmailTemplateForm
             ->components([
                 Textarea::make('email_template_title')
                     ->required()
-                    ->default(null)
                     ->columnSpanFull(),
                 TextInput::make('email_template_type')
-                    ->required()
-                    ->default(null),
+                    ->required(),
                 Textarea::make('email_template_body')
                     ->required()
                     ->columnSpanFull(),
