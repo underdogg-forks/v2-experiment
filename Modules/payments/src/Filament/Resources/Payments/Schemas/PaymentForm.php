@@ -24,8 +24,8 @@ class PaymentForm
                 DatePicker::make('payment_date')
                     ->required(),
                 TextInput::make('payment_amount')
-                    ->numeric()
-                    ->default(null),
+                    ->required()
+                    ->numeric(),
                 Textarea::make('payment_note')
                     ->default('')
                     ->columnSpanFull(),
