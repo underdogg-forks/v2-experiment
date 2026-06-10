@@ -8,7 +8,6 @@ language: en-US
 
 reviews:
   # Only review PHP files; exclude markdown, lock files, and package manifests
-  # Explicitly ignored files (user-specified — do not remove unless instructed)
   path_filters:
     - "**/*.php"
     - "!**/*.md"
@@ -35,20 +34,10 @@ reviews:
     - "!resources/css/filament/admin/nord.css"
     - "!resources/css/filament/company/nord.css"
     - "!resources/views/filament/company/widgets/switch-company-table.blade.php"
-    - "!resources/views/filament/pages/switch-company.blade.php"
-    - "!resources/views/livewire/switch-company.blade.php"
-    - "!storage/debugbar/.gitignore"
-    - "!tests/Feature/SwitchCompanyTest.php"
     - "!vite.config.js"
     # -----------------------------------------------------------------------------
 
   path_instructions:
-    - path: "app/**"
-      instructions: >
-        The app/ directory is intentionally minimal — only framework bootstrap
-        files remain here. Almost all business logic lives in Modules/*.
-        Flag any new models, Enums, or Filament Resources added directly to app/
-        as misplaced; they belong in the appropriate Modules/<name>/ directory.
     - path: "Modules/**"
       instructions: >
         This project uses a modular architecture under Modules/*.
@@ -71,13 +60,20 @@ reviews:
         - No inline form/table definitions inside the Resource class itself
         - All PHP files must pass php -l and vendor/bin/pint --dirty
         - All new models should have a corresponding factory in database/factories/
+
+    - path: "app/**"
+      instructions: >
+        The app/ directory is intentionally minimal — only framework bootstrap
+        files remain here. Almost all business logic lives in Modules/*.
+        Flag any new models, Enums, or Filament Resources added directly to app/
+        as misplaced; they belong in the appropriate Modules/<name>/ directory.
+
     - path: "Modules/*/tests/**"
       instructions: >
         Feature tests use PHPUnit with Pest-compatible #[Test] and #[Group] attributes.
         Tests must authenticate a Modules\Core\Models\User and attach a
         Modules\Core\Models\Company tenant before exercising Filament resources.
         Use RefreshDatabase. Factories live in Modules\<Name>\Database\Factories\.
-
 
   # Review tone — defines style of feedback
   # Options: assertive | chill | friendly | strict | concise | detailed
@@ -199,12 +195,9 @@ code_generation:
     language: en-US
 
   unit_tests:
-    # Instructions for AI-generated unit tests
     path_instructions:
-      - path: 'tests/Unit/**'
       - path: 'Modules/*/tests/Unit/**'
         instructions: |
-          Each test method must begin with `it_`  and is in snake_case.
           Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Each test method must contain `$this->markTestIncomplete();` by default.
@@ -220,7 +213,7 @@ code_generation:
           Avoid inline fixture setup; use factories and seeders.
       - path: 'tests/Unit/**'
         instructions: |
-          Each test method must begin with `it_`  and is in snake_case.
+          Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Each test method must contain `$this->markTestIncomplete();` by default.
           Prefer Fakes and Fixtures over Mocks.
@@ -229,7 +222,6 @@ code_generation:
           Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Default to `$this->markTestIncomplete();` until test logic is finalized.
-          Use Laravel’s HTTP helpers (`->postJson()`, `->getJson()`, etc.).
           Use Laravel's HTTP helpers (`->postJson()`, `->getJson()`, etc.).
           Avoid inline fixture setup; use factories and seeders.
 # ---------------------------------------------------------------------------------------
