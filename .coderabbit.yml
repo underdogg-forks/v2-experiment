@@ -205,7 +205,12 @@ code_generation:
           Structure tests with `it_` functions and place happy paths last.
           Reusable logic (e.g., fixtures) must reside in an abstract test case.
       - path: 'Modules/*/tests/Feature/**'
-        instructions: "Each test method must begin with `it_` and is in snake_case.\n          Annotate each test method with `#[Test]`.\n          Default to `$this->markTestIncomplete();` until test logic is finalized.\n          Use RefreshDatabase and authenticate via Modules\\Core\\Models\\User::factory().\n          Avoid inline fixture setup; use factories and seeders."
+        instructions: |
+          Each test method must begin with `it_` and is in snake_case.
+          Annotate each test method with `#[Test]`.
+          Default to `$this->markTestIncomplete();` until test logic is finalized.
+          Use RefreshDatabase and authenticate via Modules\Core\Models\User::factory().
+          Avoid inline fixture setup; use factories and seeders.
       - path: 'tests/Unit/**'
         instructions: |
           Each test method must begin with `it_` and is in snake_case.
