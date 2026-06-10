@@ -10,10 +10,10 @@ return new class () extends Migration {
         Schema::create('payments', static function (Blueprint $table) {
             $table->unsignedBigInteger('payment_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('invoice_id')->index('invoice_id');
-            $table->integer('payment_method_id')->default(0)->index('payment_method_id')->comment('enum!');
+            $table->unsignedBigInteger('invoice_id')->index('payments_invoice_id_index');
+            $table->integer('payment_method_id')->default(0)->index('payments_method_id_index')->comment('enum!');
             $table->date('payment_date');
-            $table->decimal('payment_amount', 20)->nullable()->index('payment_amount');
+            $table->decimal('payment_amount', 20)->nullable()->index('payments_amount_index');
             $table->longText('payment_note');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_payments');
+        Schema::dropIfExists('payments');
     }
 };

@@ -15,7 +15,7 @@ return new class () extends Migration {
             $table->boolean('include_item_tax')->default(0);
             $table->decimal('invoice_tax_rate_amount', 10)->default(0);
 
-            $table->index(['invoice_id', 'tax_rate_id'], 'invoice_id');
+            $table->index(['invoice_id', 'tax_rate_id'], 'invoice_tax_rates_invoice_taxrate_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('invoice_id')->references('invoice_id')->on('invoices')->onDelete('cascade');
@@ -25,6 +25,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_tax_rates');
+        Schema::dropIfExists('invoice_tax_rates');
     }
 };

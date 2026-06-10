@@ -26,6 +26,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_sumex');
+        Schema::dropIfExists('invoice_sumex');
     }
 };

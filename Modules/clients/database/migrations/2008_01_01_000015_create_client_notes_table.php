@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->date('client_note_date');
             $table->longText('client_note');
 
-            $table->index(['client_id', 'client_note_date'], 'client_id');
+            $table->index(['client_id', 'client_note_date'], 'client_notes_client_note_date_index');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('cascade');
         });

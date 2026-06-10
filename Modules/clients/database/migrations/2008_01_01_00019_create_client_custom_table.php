@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('client_custom_fieldid');
             $table->text('client_custom_fieldvalue')->nullable();
 
-            $table->unique(['client_id', 'client_custom_fieldid'], 'client_id');
+            $table->unique(['client_id', 'client_custom_fieldid'], 'client_custom_client_fieldid_unique');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_client_custom');
+        Schema::dropIfExists('client_custom');
     }
 };

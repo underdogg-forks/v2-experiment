@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Company;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use Modules\Core\Models\Company;
+use Modules\Core\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 

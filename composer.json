@@ -52,7 +52,6 @@
         "phpstan/phpstan-deprecation-rules": "^2.0.4",
         "phpunit/phpunit": "^12.5.29",
         "rector/rector": "^2.4.5",
-        "reliese/laravel": "^1.4",
         "roave/security-advisories": "dev-latest",
         "thedoctor0/laravel-factory-generator": "^1.4.4",
         "tyghaykal/laravel-seed-generator": "^2.3"
@@ -60,7 +59,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
     },

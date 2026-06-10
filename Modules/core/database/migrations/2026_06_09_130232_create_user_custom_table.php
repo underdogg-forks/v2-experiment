@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('user_custom_fieldid');
             $table->text('user_custom_fieldvalue')->nullable();
 
-            $table->unique(['user_id', 'user_custom_fieldid'], 'user_id');
+            $table->unique(['user_id', 'user_custom_fieldid'], 'user_custom_user_fieldid_unique');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_user_custom');
+        Schema::dropIfExists('user_custom');
     }
 };

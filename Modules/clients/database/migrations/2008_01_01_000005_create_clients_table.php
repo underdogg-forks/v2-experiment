@@ -26,7 +26,7 @@ return new class () extends Migration {
             $table->string('client_vat_id')->nullable();
             $table->string('client_tax_code')->nullable();
             $table->string('client_language')->nullable()->default('system');
-            $table->boolean('client_active')->default(1)->index('client_active');
+            $table->boolean('client_active')->default(1)->index('clients_active_index');
             $table->string('client_surname')->nullable();
             $table->string('client_invoicing_contact', 50)->nullable();
             $table->string('client_title', 50)->nullable();
@@ -46,6 +46,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_clients');
+        Schema::dropIfExists('clients');
     }
 };

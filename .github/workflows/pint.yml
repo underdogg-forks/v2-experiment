@@ -124,4 +124,4 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
-          commit_message: 'chore: pint fixes'
+          commit_message: 'chore: pint fixes [skip ci]'

@@ -11,7 +11,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('item_id', true);
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('quote_id');
-            $table->unsignedBigInteger('tax_rate_id')->index('item_tax_rate_id');
+            $table->unsignedBigInteger('tax_rate_id')->index('quote_items_tax_rate_id_index');
             $table->unsignedBigInteger('item_product_id')->nullable();
             $table->date('item_date_added');
             $table->string('item_name')->nullable();
@@ -23,7 +23,7 @@ return new class () extends Migration {
             $table->string('item_product_unit', 50)->nullable();
             $table->unsignedBigInteger('item_product_unit_id')->nullable();
 
-            $table->index(['quote_id', 'item_date_added', 'item_order'], 'quote_id');
+            $table->index(['quote_id', 'item_date_added', 'item_order'], 'quote_items_composite_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('quote_id')->references('quote_id')->on('quotes')->onDelete('cascade');
@@ -35,6 +35,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_quote_items');
+        Schema::dropIfExists('quote_items');
     }
 };

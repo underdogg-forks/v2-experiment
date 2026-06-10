@@ -10,8 +10,8 @@ return new class () extends Migration {
         Schema::create('quote_tax_rates', static function (Blueprint $table) {
             $table->unsignedBigInteger('quote_tax_rate_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('quote_id')->index('quote_id');
-            $table->unsignedBigInteger('tax_rate_id')->index('tax_rate_id');
+            $table->unsignedBigInteger('quote_id')->index('quote_tax_rates_quote_id_index');
+            $table->unsignedBigInteger('tax_rate_id')->index('quote_tax_rates_tax_rate_id_index');
             $table->boolean('include_item_tax')->default(0);
             $table->decimal('quote_tax_rate_amount', 20)->nullable();
 
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_quote_tax_rates');
+        Schema::dropIfExists('quote_tax_rates');
     }
 };

@@ -15,9 +15,9 @@ return new class () extends Migration {
             $table->string('merchant_key');
             $table->string('merchant_value');
 
-            $table->index('driver');
-            $table->index('client_id');
-            $table->index('merchant_key');
+            $table->index('driver', 'merchant_clients_driver_index');
+            $table->index('client_id', 'merchant_clients_client_id_index');
+            $table->index('merchant_key', 'merchant_clients_merchant_key_index');
 
             $table->foreign('company_id')->references('id')->on('companies');
             $table->foreign('client_id')->references('client_id')->on('clients');

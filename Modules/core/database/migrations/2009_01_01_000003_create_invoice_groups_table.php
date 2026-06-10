@@ -12,8 +12,8 @@ return new class () extends Migration {
             $table->unsignedBigInteger('company_id');
             $table->text('invoice_group_name')->nullable();
             $table->string('invoice_group_identifier_format');
-            $table->integer('invoice_group_next_id')->index('invoice_group_next_id');
-            $table->integer('invoice_group_left_pad')->default(0)->index('invoice_group_left_pad');
+            $table->integer('invoice_group_next_id')->index('invoice_groups_next_id_index');
+            $table->integer('invoice_group_left_pad')->default(0)->index('invoice_groups_left_pad_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
@@ -21,6 +21,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_groups');
+        Schema::dropIfExists('invoice_groups');
     }
 };

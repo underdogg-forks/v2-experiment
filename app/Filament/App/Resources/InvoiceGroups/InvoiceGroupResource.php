@@ -7,12 +7,12 @@ use App\Filament\App\Resources\InvoiceGroups\Pages\EditInvoiceGroup;
 use App\Filament\App\Resources\InvoiceGroups\Pages\ListInvoiceGroups;
 use App\Filament\App\Resources\InvoiceGroups\Schemas\InvoiceGroupForm;
 use App\Filament\App\Resources\InvoiceGroups\Tables\InvoiceGroupsTable;
-use App\Models\InvoiceGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Modules\Core\Models\InvoiceGroup;
 
 class InvoiceGroupResource extends Resource
 {

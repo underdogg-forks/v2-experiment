@@ -10,9 +10,9 @@ return new class () extends Migration {
         Schema::create('merchant_responses', static function (Blueprint $table) {
             $table->unsignedBigInteger('merchant_response_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('invoice_id')->index('invoice_id');
+            $table->unsignedBigInteger('invoice_id')->index('merchant_responses_invoice_id_index');
             $table->boolean('merchant_response_successful')->nullable()->default(true);
-            $table->date('merchant_response_date')->index('merchant_response_date');
+            $table->date('merchant_response_date')->index('merchant_responses_date_index');
             $table->string('merchant_response_driver', 35);
             $table->string('merchant_response');
             $table->string('merchant_response_reference');
@@ -24,6 +24,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_merchant_responses');
+        Schema::dropIfExists('merchant_responses');
     }
 };

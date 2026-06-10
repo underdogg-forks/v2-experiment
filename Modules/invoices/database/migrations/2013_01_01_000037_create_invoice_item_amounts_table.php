@@ -10,7 +10,7 @@ return new class () extends Migration {
         Schema::create('invoice_item_amounts', static function (Blueprint $table) {
             $table->unsignedBigInteger('item_amount_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('item_id')->index('item_id');
+            $table->unsignedBigInteger('item_id')->index('invoice_item_amounts_item_id_index');
             $table->decimal('item_subtotal', 20)->nullable();
             $table->decimal('item_tax_total', 20)->nullable();
             $table->decimal('item_discount', 20)->nullable();
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_item_amounts');
+        Schema::dropIfExists('invoice_item_amounts');
     }
 };

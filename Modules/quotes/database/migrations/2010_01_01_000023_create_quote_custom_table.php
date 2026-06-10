@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('quote_custom_fieldid');
             $table->text('quote_custom_fieldvalue')->nullable();
 
-            $table->unique(['quote_id', 'quote_custom_fieldid'], 'quote_id');
+            $table->unique(['quote_id', 'quote_custom_fieldid'], 'quote_custom_id_fieldid_unique');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('quote_id')->references('quote_id')->on('quotes')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_quote_custom');
+        Schema::dropIfExists('quote_custom');
     }
 };

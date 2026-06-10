@@ -10,7 +10,7 @@ return new class () extends Migration {
         Schema::create('settings', static function (Blueprint $table) {
             $table->unsignedBigInteger('setting_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->string('setting_key', 50)->index('setting_key');
+            $table->string('setting_key', 50)->index('settings_key_index');
             $table->longText('setting_value');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
@@ -19,6 +19,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_settings');
+        Schema::dropIfExists('settings');
     }
 };
