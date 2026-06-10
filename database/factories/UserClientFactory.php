@@ -27,11 +27,9 @@ final class UserClientFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id'       => \App\Models\Company::factory(),
-            'client_id'        => fake()->randomNumber(),
-            'user_id'          => fake()->randomNumber(),
-            'client_client_id' => \App\Models\Client::factory(),
-            'user_user_id'     => \App\Models\User::factory(),
+            'company_id' => \App\Models\Company::factory(),
+            'client_id'  => \App\Models\Client::factory(),
+            'user_id'    => \App\Models\User::factory(),
         ];
     }
 }

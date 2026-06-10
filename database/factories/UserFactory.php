@@ -28,9 +28,7 @@ final class UserFactory extends Factory
     {
         return [
             'user_type'                => fake()->randomNumber(),
-            'user_active'              => fake()->optional()->randomNumber(1),
-            'user_date_created'        => fake()->dateTime(),
-            'user_date_modified'       => fake()->dateTime(),
+            'user_active'              => fake()->boolean(70),
             'user_language'            => fake()->optional()->word,
             'user_name'                => fake()->optional()->userName,
             'user_company'             => fake()->optional()->word,
@@ -59,6 +57,8 @@ final class UserFactory extends Factory
             'user_remittance_text'     => fake()->optional()->word,
             'user_gln'                 => fake()->optional()->randomNumber(),
             'user_rcc'                 => fake()->optional()->word,
+            'user_date_created'        => fake()->dateTime(),
+            'user_date_modified'       => fake()->dateTime(),
         ];
     }
 }

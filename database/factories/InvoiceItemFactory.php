@@ -28,7 +28,7 @@ final class InvoiceItemFactory extends Factory
     {
         return [
             'company_id'           => \App\Models\Company::factory(),
-            'invoice_id'           => fake()->randomNumber(),
+            'invoice_id'           => \App\Models\Invoice::factory(),
             'item_tax_rate_id'     => \App\Models\TaxRate::factory(),
             'item_product_id'      => \App\Models\Product::factory(),
             'item_task_id'         => \App\Models\Task::factory(),
@@ -43,7 +43,6 @@ final class InvoiceItemFactory extends Factory
             'item_product_unit'    => fake()->optional()->word,
             'item_product_unit_id' => \App\Models\Unit::factory(),
             'item_date'            => fake()->optional()->date(),
-            'invoice_invoice_id'   => \App\Models\Invoice::factory(),
         ];
     }
 }

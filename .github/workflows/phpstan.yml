@@ -13,15 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PHP with Composer
-        uses: ./.github/actions/setup-php-composer
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          php-version: '8.4'
-          php-extensions: 'json'
-          composer-flags: '--prefer-dist --no-interaction --no-progress'
+          persist-credentials: false
+      - name: Cache Composer dependencies
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+      - name: Set up PHP
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
+        with:
+          php-version: 8.4
+          coverage: none
 
       - name: Run PHPStan (JSON output)
         id: phpstan-analysis
@@ -69,20 +74,20 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             try {
               if (!fs.existsSync('phpstan-report.md')) {
                 console.log('PHPStan report file "phpstan-report.md" not found. Skipping PR comment.');
                 return;
               }
-            
+
               const report = fs.readFileSync('phpstan-report.md', 'utf8');
-            
+
               if (!report || report.trim().length === 0) {
                 console.log('PHPStan report is empty. Skipping PR comment.');
                 return;
               }
-            
+
               await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,

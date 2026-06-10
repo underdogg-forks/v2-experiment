@@ -31,11 +31,13 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup PHP with Composer
-        uses: ./.github/actions/setup-php-composer
+      - name: Set up PHP
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # 2.37.1
         with:
-          php-version: '8.4'
-          composer-flags: '--prefer-dist --no-interaction --no-progress'
+          php-version: 8.4
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-scripts
 
       - name: Run Laravel Pint
         id: pint_run
@@ -54,7 +56,7 @@ jobs:
               echo "Running Laravel Pint in dirty mode (checking only changed files)..."
             fi
           fi
-          
+
           set +e  # Don't exit on error
           if [[ "$PINT_MODE" == "dirty" ]]; then
             vendor/bin/pint --dirty 2>&1 | tee pint_output.log
@@ -63,10 +65,10 @@ jobs:
           fi
           PINT_EXIT_CODE=${PIPESTATUS[0]}
           set -e  # Re-enable exit on error
-          
+
           # Store exit code for later steps
           echo "exit_code=$PINT_EXIT_CODE" >> $GITHUB_OUTPUT
-          
+
           # Check if there were parse errors
           if grep -q "Parse error" pint_output.log || grep -q "!" pint_output.log; then
             echo "parse_errors=true" >> $GITHUB_OUTPUT
@@ -74,7 +76,7 @@ jobs:
           else
             echo "parse_errors=false" >> $GITHUB_OUTPUT
           fi
-          
+
           # Don't fail the step - we want to commit successfully formatted files
           exit 0
 
@@ -90,26 +92,26 @@ jobs:
             echo "✓ No files were modified"
           fi
 
-      - name: Commit and Push Changes
-        if: steps.verify_diff.outputs.has_changes == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -A
-          git commit -m "style: apply Laravel Pint fixes" --no-verify
-          git push
-          
-          if [[ "${{ steps.pint_run.outputs.parse_errors }}" == "true" ]]; then
-            echo "WARNING: Changes committed successfully, but some files had parse errors and were not formatted"
-            echo "Please fix the parse errors in the files marked with '!' in the Pint output above"
-          else
-            echo "SUCCESS: All changes committed and pushed successfully"
-          fi
+      #- name: Commit and Push Changes
+      #  if: steps.verify_diff.outputs.has_changes == 'true'
+      #  run: |
+      #    git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      #    git config --local user.name "github-actions[bot]"
+      #    git add -A
+      #    git commit -m "style: apply Laravel Pint fixes" --no-verify
+      #    git push
+      #
+      #    if [[ "${{ steps.pint_run.outputs.parse_errors }}" == "true" ]]; then
+      #      echo "WARNING: Changes committed successfully, but some files had parse errors and were not formatted"
+      #      echo "Please fix the parse errors in the files marked with '!' in the Pint output above"
+      #    else
+      #      echo "SUCCESS: All changes committed and pushed successfully"
+      #    fi
 
       - name: Report Parse Errors
         if: steps.pint_run.outputs.parse_errors == 'true'
         run: |
-          echo "❌ Pint encountered parse errors in one or more files"
+          echo "Pint encountered parse errors in one or more files"
           echo "Files with parse errors are marked with '!' in the output above"
           echo "Successfully formatted files have been committed, but files with parse errors were skipped"
           echo ""
@@ -118,3 +120,8 @@ jobs:
           echo "2. Fix the syntax errors in those files"
           echo "3. Re-run this workflow"
           exit 1
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
+        with:
+          commit_message: 'chore: pint fixes'

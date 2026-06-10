@@ -28,19 +28,16 @@ final class ExpenseFactory extends Factory
     {
         return [
             'company_id'         => \App\Models\Company::factory(),
-            'invoice_id'         => fake()->optional()->randomNumber(),
-            'customer_id'        => fake()->optional()->randomNumber(),
+            'invoice_invoice_id' => \App\Models\Invoice::factory(),
             'vendor_id'          => \App\Models\Client::factory(),
             'category_id'        => \App\Models\ExpenseCategory::factory(),
-            'user_id'            => fake()->optional()->randomNumber(),
+            'user_user_id'       => \App\Models\User::factory(),
             'expense_number'     => fake()->word,
             'expense_status'     => fake()->word,
             'expense_type'       => fake()->word,
             'expensed_at'        => fake()->date(),
             'expense_amount'     => fake()->randomFloat(4, 0, 9999999999999999),
             'description'        => fake()->optional()->text,
-            'invoice_invoice_id' => \App\Models\Invoice::factory(),
-            'user_user_id'       => \App\Models\User::factory(),
         ];
     }
 }

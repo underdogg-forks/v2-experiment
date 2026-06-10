@@ -27,10 +27,9 @@ final class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id'       => \App\Models\Company::factory(),
-            'client_id'        => fake()->randomNumber(),
-            'project_name'     => fake()->optional()->text,
-            'client_client_id' => \App\Models\Client::factory(),
+            'company_id'   => \App\Models\Company::factory(),
+            'client_id'    => \App\Models\Client::factory(),
+            'project_name' => fake()->optional()->text,
         ];
     }
 }

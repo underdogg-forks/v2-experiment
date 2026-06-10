@@ -28,7 +28,7 @@ final class ClientNoteFactory extends Factory
     {
         return [
             'company_id'       => fake()->randomNumber(),
-            'client_id'        => fake()->randomNumber(),
+            'client_id'        => \App\Models\Client::factory(),
             'client_note_date' => fake()->date(),
             'client_note'      => fake()->word,
         ];

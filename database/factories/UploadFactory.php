@@ -28,12 +28,11 @@ final class UploadFactory extends Factory
     {
         return [
             'company_id'         => \App\Models\Company::factory(),
-            'client_id'          => fake()->randomNumber(),
+            'client_id'          => \App\Models\Client::factory(),
             'url_key'            => fake()->word,
             'file_name_original' => fake()->word,
             'file_name_new'      => fake()->word,
             'uploaded_date'      => fake()->date(),
-            'client_client_id'   => \App\Models\Client::factory(),
         ];
     }
 }

@@ -28,10 +28,9 @@ final class UserCustomFactory extends Factory
     {
         return [
             'company_id'             => \App\Models\Company::factory(),
-            'user_id'                => fake()->randomNumber(),
+            'user_id'                => \App\Models\User::factory(),
             'user_custom_fieldid'    => fake()->randomNumber(),
             'user_custom_fieldvalue' => fake()->optional()->text,
-            'user_user_id'           => \App\Models\User::factory(),
         ];
     }
 }

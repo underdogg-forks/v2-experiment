@@ -28,10 +28,9 @@ final class ClientCustomFactory extends Factory
     {
         return [
             'company_id'               => \App\Models\Company::factory(),
-            'client_id'                => fake()->randomNumber(),
+            'client_id'                => \App\Models\Client::factory(),
             'client_custom_fieldid'    => fake()->randomNumber(),
             'client_custom_fieldvalue' => fake()->optional()->text,
-            'client_client_id'         => \App\Models\Client::factory(),
         ];
     }
 }

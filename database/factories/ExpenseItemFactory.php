@@ -30,7 +30,7 @@ final class ExpenseItemFactory extends Factory
             'company_id'    => \App\Models\Company::factory(),
             'expense_id'    => \App\Models\Expense::factory(),
             'item_id'       => \App\Models\Product::factory(),
-            'unit_id'       => fake()->optional()->randomNumber(),
+            'unit_id'       => \App\Models\Unit::factory(),
             'added_at'      => fake()->optional()->date(),
             'item_name'     => fake()->optional()->word,
             'is_recurring'  => fake()->randomNumber(1),
@@ -46,7 +46,6 @@ final class ExpenseItemFactory extends Factory
             'tax_rate_2_id' => \App\Models\TaxRate::factory(),
             'display_order' => fake()->optional()->word,
             'description'   => fake()->optional()->text,
-            'unit_unit_id'  => \App\Models\Unit::factory(),
         ];
     }
 }

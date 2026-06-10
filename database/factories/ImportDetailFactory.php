@@ -27,11 +27,10 @@ final class ImportDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'import_id'         => fake()->randomNumber(),
+            'import_id'         => \App\Models\Import::factory(),
             'import_lang_key'   => fake()->word,
             'import_table_name' => fake()->word,
             'import_record_id'  => fake()->randomNumber(),
-            'import_import_id'  => \App\Models\Import::factory(),
         ];
     }
 }
