@@ -3,6 +3,8 @@
 namespace Modules\Clients\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Clients\Models\Client;
+use Modules\Clients\Observers\ClientObserver;
 
 class ClientsServiceProvider extends ServiceProvider
 {
@@ -12,5 +14,7 @@ class ClientsServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'clients');
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+
+        Client::observe(ClientObserver::class);
     }
 }

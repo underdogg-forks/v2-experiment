@@ -80,27 +80,6 @@ class Client extends Model
 
     protected $guarded = [];
 
-    #region Static Methods
-    /*
-    |--------------------------------------------------------------------------
-    | Static Methods
-    |--------------------------------------------------------------------------
-    */
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->client_date_created)) {
-                $model->client_date_created = \Carbon\Carbon::now();
-            }
-            if (empty($model->client_date_modified)) {
-                $model->client_date_modified = \Carbon\Carbon::now();
-            }
-        });
-
-        static::updating(function ($model) {
-            $model->client_date_modified = \Carbon\Carbon::now();
-        });
-    }
     #endregion
     #region Relationships
     /*
