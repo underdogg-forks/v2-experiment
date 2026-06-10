@@ -12,11 +12,8 @@ class InvoiceGroupForm
     {
         return $schema
             ->components([
-                TextInput::make('company_id')
-                    ->required()
-                    ->numeric(),
                 Textarea::make('invoice_group_name')
-                    ->default(null)
+                    ->required()
                     ->columnSpanFull(),
                 TextInput::make('invoice_group_identifier_format')
                     ->required(),
