@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Clients\Models\Client;
 use Modules\Core\Models\Company;
+use Modules\Core\Traits\TenantAware;
 use Modules\Core\Models\User;
 use Modules\Invoices\Models\Invoice;
 
@@ -38,6 +39,7 @@ use Modules\Invoices\Models\Invoice;
 class Expense extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 

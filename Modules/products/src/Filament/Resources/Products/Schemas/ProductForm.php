@@ -13,22 +13,16 @@ class ProductForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
-                Select::make('family_id')
-                    ->relationship('family', 'family_id')
-                    ->default(null),
                 TextInput::make('product_sku')
                     ->default(null),
                 TextInput::make('product_name')
-                    ->default(null),
+                    ->required(),
                 Textarea::make('product_description')
-                    ->required()
+                    ->default(null)
                     ->columnSpanFull(),
                 TextInput::make('product_price')
+                    ->required()
                     ->numeric()
-                    ->default(null)
                     ->prefix('$'),
                 TextInput::make('purchase_price')
                     ->numeric()

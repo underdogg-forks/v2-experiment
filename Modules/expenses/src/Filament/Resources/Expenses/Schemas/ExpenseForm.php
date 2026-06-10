@@ -13,24 +13,6 @@ class ExpenseForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
-                Select::make('invoice_id')
-                    ->relationship('invoice', 'invoice_id')
-                    ->default(null),
-                TextInput::make('customer_id')
-                    ->numeric()
-                    ->default(null),
-                TextInput::make('vendor_id')
-                    ->numeric()
-                    ->default(null),
-                TextInput::make('category_id')
-                    ->numeric()
-                    ->default(null),
-                Select::make('user_id')
-                    ->relationship('user', 'user_id')
-                    ->default(null),
                 TextInput::make('expense_number')
                     ->required(),
                 TextInput::make('expense_status')

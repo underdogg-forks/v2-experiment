@@ -14,9 +14,6 @@ class PaymentForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
                 Select::make('invoice_id')
                     ->relationship('invoice', 'invoice_id')
                     ->required(),
@@ -30,7 +27,7 @@ class PaymentForm
                     ->numeric()
                     ->default(null),
                 Textarea::make('payment_note')
-                    ->required()
+                    ->default('')
                     ->columnSpanFull(),
             ]);
     }
