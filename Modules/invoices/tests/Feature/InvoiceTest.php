@@ -38,11 +38,12 @@ class InvoiceTest extends TestCase
         Filament::bootCurrentPanel();
 
         $this->company      = Company::factory()->create();
+        Filament::setTenant($this->company, isQuiet: true);
         $this->client       = Client::factory()->create(['company_id' => $this->company->id]);
         $this->invoiceGroup = InvoiceGroup::factory()->create(['company_id' => $this->company->id]);
         $this->user         = User::factory()->create();
 
-        $this->user->companies()->attach($this->company->id);
+        $this->user->companies()->syncWithoutDetaching([$this->company->id]);
     }
 
     #[Test]
