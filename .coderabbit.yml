@@ -44,6 +44,39 @@ reviews:
 
   path_instructions:
     - path: "app/**"
+      instructions: >
+        The app/ directory is intentionally minimal — only framework bootstrap
+        files remain here. Almost all business logic lives in Modules/*.
+        Flag any new models, Enums, or Filament Resources added directly to app/
+        as misplaced; they belong in the appropriate Modules/<name>/ directory.
+    - path: "Modules/**"
+      instructions: >
+        This project uses a modular architecture under Modules/*.
+        Each module lives in Modules/<name>/ and follows this layout:
+          src/Models/        — Eloquent models (namespace Modules\<Name>\Models)
+          src/Filament/Resources/<Group>/  — Filament v5 CRUD resources;
+            each Resource delegates form/table to Schemas/ and Tables/ classes
+          src/Services/      — Service classes
+          src/Providers/     — Laravel ServiceProvider
+          src/Enums/         — PHP 8.1 backed enums (core module only)
+          src/Contracts/     — Interfaces (core module only)
+          database/factories/ — Eloquent factories (namespace Modules\<Name>\Database\Factories)
+          database/migrations/ — module-scoped migrations
+          tests/Feature/     — PHPUnit feature tests using #[Test] and #[Group] attributes
+
+        Key conventions:
+        - Namespaces follow PSR-4: Modules\<Name>\* mapped from Modules/<name>/src/
+        - Models use cross-module fully-qualified use statements (no App\Models imports)
+        - Filament Resources must delegate form() to a *Form class and table() to a *Table class
+        - No inline form/table definitions inside the Resource class itself
+        - All PHP files must pass php -l and vendor/bin/pint --dirty
+        - All new models should have a corresponding factory in database/factories/
+    - path: "Modules/*/tests/**"
+      instructions: >
+        Feature tests use PHPUnit with Pest-compatible #[Test] and #[Group] attributes.
+        Tests must authenticate a Modules\Core\Models\User and attach a
+        Modules\Core\Models\Company tenant before exercising Filament resources.
+        Use RefreshDatabase. Factories live in Modules\<Name>\Database\Factories\.
 
 
   # Review tone — defines style of feedback
@@ -169,18 +202,34 @@ code_generation:
     # Instructions for AI-generated unit tests
     path_instructions:
       - path: 'tests/Unit/**'
+      - path: 'Modules/*/tests/Unit/**'
         instructions: |
           Each test method must begin with `it_`  and is in snake_case.
+          Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Each test method must contain `$this->markTestIncomplete();` by default.
           Prefer Fakes and Fixtures over Mocks.
           Structure tests with `it_` functions and place happy paths last.
           Reusable logic (e.g., fixtures) must reside in an abstract test case.
+      - path: 'Modules/*/tests/Feature/**'
+        instructions: |
+          Each test method must begin with `it_` and is in snake_case.
+          Annotate each test method with `#[Test]`.
+          Default to `$this->markTestIncomplete();` until test logic is finalized.
+          Use RefreshDatabase and authenticate via Modules\Core\Models\User::factory().
+          Avoid inline fixture setup; use factories and seeders.
+      - path: 'tests/Unit/**'
+        instructions: |
+          Each test method must begin with `it_`  and is in snake_case.
+          Annotate each test method with `#[Test]`.
+          Each test method must contain `$this->markTestIncomplete();` by default.
+          Prefer Fakes and Fixtures over Mocks.
       - path: 'tests/Feature/**'
         instructions: |
           Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Default to `$this->markTestIncomplete();` until test logic is finalized.
           Use Laravel’s HTTP helpers (`->postJson()`, `->getJson()`, etc.).
+          Use Laravel's HTTP helpers (`->postJson()`, `->getJson()`, etc.).
           Avoid inline fixture setup; use factories and seeders.
 # ---------------------------------------------------------------------------------------
