@@ -3,6 +3,7 @@
 namespace Modules\Core\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Core\Traits\TenantAware;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,7 @@ use Modules\Quotes\Models\Quote;
 class InvoiceGroup extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 

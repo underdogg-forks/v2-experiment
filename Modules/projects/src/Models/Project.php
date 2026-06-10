@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Clients\Models\Client;
 use Modules\Core\Models\Company;
+use Modules\Core\Traits\TenantAware;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class Project extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 
