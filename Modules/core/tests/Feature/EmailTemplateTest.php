@@ -33,7 +33,7 @@ class EmailTemplateTest extends TestCase
         $this->company = Company::factory()->create();
         Filament::setTenant($this->company, isQuiet: true);
         $this->user = User::factory()->create();
-        $this->company->users()->attach($this->user->user_id);
+        $this->company->users()->syncWithoutDetaching([$this->user->user_id]);
     }
 
     // region crud

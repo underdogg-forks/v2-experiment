@@ -25,7 +25,7 @@ abstract class AbstractCompanyPanelTestCase extends TestCase
         $this->company = Company::factory()->create();
         Filament::setTenant($this->company, isQuiet: true);
         $this->user = User::factory()->create();
-        $this->user->companies()->attach($this->company->id);
+        $this->user->companies()->syncWithoutDetaching([$this->company->id]);
 
         $this->actingAs($this->user);
     }
