@@ -103,70 +103,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     protected $guarded = [];
 
-    public function canAccessPanel(Panel $panel): bool
-    {
-        // SuperAdmin, Admin, Assistance can access any panel
-        if (
-            $this->hasRole(UserRole::SUPER_ADMIN->value)
-            || $this->hasRole(UserRole::ADMIN->value)
-            || $this->hasRole(UserRole::ASSIST->value)
-        ) {
-            return true;
-        }
+    #region Static Methods
+    /*
+    |--------------------------------------------------------------------------
+    | Static Methods
+    |--------------------------------------------------------------------------
+    */
 
-        // UserAdmin and User can only access the 'company' panel
-        if ($panel->getId() === 'company') {
-            return $this->hasRole(UserRole::CUSTOMER_ADMIN->value)
-                || $this->hasRole(UserRole::CUSTOMER->value);
-        }
-
-        // All other roles or panels not explicitly allowed
-        return false;
-    }
-
-    public function getFilamentName(): string
-    {
-        return $this->user_name ?? $this->user_email ?? 'User';
-    }
-
-    public function getAuthIdentifierName(): string
-    {
-        return 'user_name';
-    }
-
-    public function getAuthPassword(): string
-    {
-        return 'user_password';
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return null;
-    }
-
-    public function isSuperAdmin(): bool
-    {
-        return $this->hasRole(UserRole::SUPER_ADMIN->value);
-    }
-
-    public function getTenants(Panel $panel): array|\Illuminate\Support\Collection
-    {
-        return $this->companies;
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        if ($this->isSuperAdmin()) {
-            return true;
-        }
-
-        return $this->companies()->whereKey($tenant->getKey())->exists();
-    }
-
-    public function getDefaultTenant(Panel $panel): ?Model
-    {
-        return $this->companies()->first();
-    }
+    #endregion
+    #region Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function companies(): BelongsToMany
     {
@@ -203,9 +153,103 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     {
         return $this->hasMany(UserCustom::class);
     }
+    #endregion
+    #region Accessors
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
 
+    public function getFilamentName(): string
+    {
+        return $this->user_name ?? $this->user_email ?? 'User';
+    }
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'user_name';
+    }
+
+    public function getAuthPassword(): string
+    {
+        return 'user_password';
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return null;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(UserRole::SUPER_ADMIN->value);
+    }
+
+    public function getTenants(Panel $panel): array|\Illuminate\Support\Collection
+    {
+        return $this->companies;
+    }
+
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->companies()->first();
+    }
+    #endregion
+    #region Mutators
+    /*
+    |--------------------------------------------------------------------------
+    | Mutators
+    |--------------------------------------------------------------------------
+    */
+
+    #endregion
+    #region Scopes
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // SuperAdmin, Admin, Assistance can access any panel
+        if (
+            $this->hasRole(UserRole::SUPER_ADMIN->value)
+            || $this->hasRole(UserRole::ADMIN->value)
+            || $this->hasRole(UserRole::ASSIST->value)
+        ) {
+            return true;
+        }
+
+        // UserAdmin and User can only access the 'company' panel
+        if ($panel->getId() === 'company') {
+            return $this->hasRole(UserRole::CUSTOMER_ADMIN->value)
+                || $this->hasRole(UserRole::CUSTOMER->value);
+        }
+
+        // All other roles or panels not explicitly allowed
+        return false;
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->companies()->whereKey($tenant->getKey())->exists();
+    }
+    #endregion
+    #region Factory
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
     protected static function newFactory(): Factory
     {
         return \Modules\Core\Database\Factories\UserFactory::new();
     }
+    #endregion
 }

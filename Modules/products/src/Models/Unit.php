@@ -40,6 +40,21 @@ class Unit extends Model
 
     protected $guarded = [];
 
+    #region Static Methods
+    /*
+    |--------------------------------------------------------------------------
+    | Static Methods
+    |--------------------------------------------------------------------------
+    */
+
+    #endregion
+    #region Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
@@ -64,9 +79,40 @@ class Unit extends Model
     {
         return $this->hasMany(QuoteItem::class, 'item_product_unit_id');
     }
+    #endregion
+    #region Accessors
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
 
+    #endregion
+    #region Mutators
+    /*
+    |--------------------------------------------------------------------------
+    | Mutators
+    |--------------------------------------------------------------------------
+    */
+
+    #endregion
+    #region Scopes
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
+    #endregion
+    #region Factory
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
     protected static function newFactory(): Factory
     {
         return \Modules\Products\Database\Factories\UnitFactory::new();
     }
+    #endregion
 }

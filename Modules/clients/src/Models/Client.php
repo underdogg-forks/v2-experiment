@@ -80,6 +80,34 @@ class Client extends Model
 
     protected $guarded = [];
 
+    #region Static Methods
+    /*
+    |--------------------------------------------------------------------------
+    | Static Methods
+    |--------------------------------------------------------------------------
+    */
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->client_date_created)) {
+                $model->client_date_created = \Carbon\Carbon::now();
+            }
+            if (empty($model->client_date_modified)) {
+                $model->client_date_modified = \Carbon\Carbon::now();
+            }
+        });
+
+        static::updating(function ($model) {
+            $model->client_date_modified = \Carbon\Carbon::now();
+        });
+    }
+    #endregion
+    #region Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
@@ -120,25 +148,40 @@ class Client extends Model
         return $this->belongsToMany(User::class, 'user_clients')
             ->withPivot('user_client_id', 'company_id');
     }
+    #endregion
+    #region Accessors
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
 
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->client_date_created)) {
-                $model->client_date_created = \Carbon\Carbon::now();
-            }
-            if (empty($model->client_date_modified)) {
-                $model->client_date_modified = \Carbon\Carbon::now();
-            }
-        });
+    #endregion
+    #region Mutators
+    /*
+    |--------------------------------------------------------------------------
+    | Mutators
+    |--------------------------------------------------------------------------
+    */
 
-        static::updating(function ($model) {
-            $model->client_date_modified = \Carbon\Carbon::now();
-        });
-    }
+    #endregion
+    #region Scopes
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
 
+    #endregion
+    #region Factory
+    /*
+    |--------------------------------------------------------------------------
+    | Factory
+    |--------------------------------------------------------------------------
+    */
     protected static function newFactory(): Factory
     {
         return \Modules\Clients\Database\Factories\ClientFactory::new();
     }
+    #endregion
 }
