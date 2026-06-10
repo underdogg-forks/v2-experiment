@@ -2,16 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Modules\Core\Models\Company;
 use Modules\Core\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
+use Tests\AbstractCompanyPanelTestCase;
 
-class SwitchCompanyTest extends TestCase
+class SwitchCompanyTest extends AbstractCompanyPanelTestCase
 {
-    use RefreshDatabase;
 
     #[Test]
     public function it_can_switch_company(): void
