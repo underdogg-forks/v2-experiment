@@ -4,6 +4,7 @@ namespace Modules\Clients\Filament\Resources\Clients;
 
 use BackedEnum;
 use Filament\Resources\Resource;
+use Modules\Core\Filament\Resources\BaseResource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -14,7 +15,7 @@ use Modules\Clients\Filament\Resources\Clients\Schemas\ClientForm;
 use Modules\Clients\Filament\Resources\Clients\Tables\ClientsTable;
 use Modules\Clients\Models\Client;
 
-class ClientResource extends Resource
+class ClientResource extends BaseResource
 {
     protected static ?string $model = Client::class;
 

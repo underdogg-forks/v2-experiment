@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Company;
 use Modules\Core\Models\User;
+use Modules\Core\Traits\TenantAware;
 use Modules\Expenses\Models\Expense;
 use Modules\Invoices\Models\Invoice;
 use Modules\Projects\Models\Project;
@@ -59,7 +60,7 @@ use Modules\Quotes\Models\Quote;
  */
 class Client extends Model
 {
-    use HasFactory;
+    use HasFactory, TenantAware;
 
     public $timestamps = false;
 
