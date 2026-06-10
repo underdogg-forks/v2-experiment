@@ -14,8 +14,8 @@ class InvoiceGroupsTable
     {
         return $table
             ->columns([
-                TextColumn::make('company_id')
-                    ->numeric()
+                TextColumn::make('invoice_group_name')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('invoice_group_identifier_format')
                     ->searchable(),
