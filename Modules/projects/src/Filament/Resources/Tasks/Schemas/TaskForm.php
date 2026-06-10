@@ -2,12 +2,15 @@
 
 namespace Modules\Projects\Filament\Resources\Tasks\Schemas;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Modules\Core\Models\TaxRate;
+use Modules\Projects\Models\Project;
 
 class TaskForm
 {
@@ -15,28 +18,29 @@ class TaskForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
                 Select::make('project_id')
-                    ->relationship('project', 'project_id')
+                    ->options(fn () => Project::query()
+                        ->where('company_id', Filament::getTenant()?->id)
+                        ->pluck('project_name', 'project_id'))
                     ->required(),
                 TextInput::make('task_name')
                     ->default(null),
                 Textarea::make('task_description')
-                    ->required()
+                    ->default(null)
                     ->columnSpanFull(),
                 TextInput::make('task_price')
                     ->numeric()
                     ->default(null)
                     ->prefix('$'),
                 DatePicker::make('task_finish_date')
-                    ->required(),
+                    ->default(null),
                 Toggle::make('task_status')
-                    ->required(),
+                    ->default(false),
                 Select::make('tax_rate_id')
-                    ->relationship('tax_rate', 'tax_rate_id')
-                    ->required(),
+                    ->options(fn () => TaxRate::query()
+                        ->where('company_id', Filament::getTenant()?->id)
+                        ->pluck('tax_rate_name', 'tax_rate_id'))
+                    ->default(null),
             ]);
     }
 }

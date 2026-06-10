@@ -2,11 +2,13 @@
 
 namespace Modules\Payments\Filament\Resources\Payments\Schemas;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Modules\Invoices\Models\Invoice;
 
 class PaymentForm
 {
@@ -15,7 +17,9 @@ class PaymentForm
         return $schema
             ->components([
                 Select::make('invoice_id')
-                    ->relationship('invoice', 'invoice_id')
+                    ->options(fn () => Invoice::query()
+                        ->where('company_id', Filament::getTenant()?->id)
+                        ->pluck('invoice_number', 'invoice_id'))
                     ->required(),
                 TextInput::make('payment_method_id')
                     ->required()

@@ -6,6 +6,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Modules\Core\Models\TaxRate;
+use Modules\Products\Models\Unit;
 
 class ProductForm
 {
@@ -31,10 +33,10 @@ class ProductForm
                 TextInput::make('provider_name')
                     ->default(null),
                 Select::make('tax_rate_id')
-                    ->relationship('tax_rate', 'tax_rate_id')
+                    ->options(fn () => TaxRate::query()->pluck('tax_rate_name', 'tax_rate_id'))
                     ->default(null),
                 Select::make('unit_id')
-                    ->relationship('unit', 'unit_id')
+                    ->options(fn () => Unit::query()->pluck('unit_name', 'unit_id'))
                     ->default(null),
                 TextInput::make('product_tariff')
                     ->numeric()
