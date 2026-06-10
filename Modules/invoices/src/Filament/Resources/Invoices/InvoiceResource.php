@@ -3,6 +3,7 @@
 namespace Modules\Invoices\Filament\Resources\Invoices;
 
 use BackedEnum;
+use Filament\Facades\Filament;
 use Modules\Core\Filament\Resources\BaseResource as Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -28,6 +29,22 @@ class InvoiceResource extends Resource
     public static function table(Table $table): Table
     {
         return InvoicesTable::configure($table);
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data = parent::mutateFormDataBeforeCreate($data);
+
+        $data['user_id']                ??= Filament::auth()->user()?->getKey();
+        $data['invoice_date_created']   ??= now()->toDateString();
+        $data['invoice_time_created']   ??= now()->toTimeString();
+        $data['invoice_date_modified']  ??= now();
+        $data['invoice_date_due']       ??= now()->addDays(30)->toDateString();
+        $data['invoice_terms']          ??= '';
+        $data['invoice_url_key']        ??= \Illuminate\Support\Str::random(32);
+        $data['payment_method']         ??= 0;
+
+        return $data;
     }
 
     public static function getRelations(): array
