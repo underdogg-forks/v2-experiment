@@ -36,7 +36,7 @@ class SwitchCompany extends Page implements HasForms, HasTable
                     ->action(function (Company $record) {
                         session(['current_company_id' => $record->id]);
                         // Redirect to the new company dashboard
-                        redirect(route('filament.company.pages.dashboard', ['tenant' => $record->search_code]));
+                        redirect(route('filament.company.home', ['tenant' => $record->search_code]));
                     })
                     ->disabled(fn (Company $record) => $record->id === session('current_company_id')),
             ]);

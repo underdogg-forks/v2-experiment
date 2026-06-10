@@ -30,7 +30,7 @@ class SwitchCompanyTest extends AbstractCompanyPanelTestCase
             ->callTableAction('switch', $companies->last());
 
         /* Assert */
-        $test->assertRedirect(route('filament.company.pages.dashboard', ['tenant' => $companies->last()->search_code]));
+        $test->assertRedirect(route('filament.company.home', ['tenant' => $companies->last()->search_code]));
         $this->assertEquals($companies->last()->id, session('current_company_id'));
     }
 
