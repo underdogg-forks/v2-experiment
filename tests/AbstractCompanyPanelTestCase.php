@@ -13,6 +13,7 @@ abstract class AbstractCompanyPanelTestCase extends TestCase
     use DatabaseTransactions;
 
     protected $company;
+    protected $client;
     protected $user;
 
     protected function setUp(): void
