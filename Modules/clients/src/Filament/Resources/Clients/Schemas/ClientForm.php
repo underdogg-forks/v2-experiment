@@ -15,10 +15,8 @@ class ClientForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
                 TextInput::make('client_name')
+                    ->required()
                     ->default(null),
                 TextInput::make('client_company')
                     ->default(null),
@@ -74,10 +72,6 @@ class ClientForm
                 TextInput::make('client_gender')
                     ->numeric()
                     ->default(0),
-                DateTimePicker::make('client_date_created')
-                    ->required(),
-                DateTimePicker::make('client_date_modified')
-                    ->required(),
             ]);
     }
 }
