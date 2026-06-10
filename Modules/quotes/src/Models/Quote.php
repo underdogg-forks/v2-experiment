@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Clients\Models\Client;
 use Modules\Core\Models\Company;
+use Modules\Core\Traits\TenantAware;
 use Modules\Core\Models\InvoiceGroup;
 use Modules\Core\Models\TaxRate;
 use Modules\Core\Models\User;
@@ -46,6 +47,7 @@ use Modules\Quotes\Database\Factories\QuoteFactory;
 class Quote extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 
