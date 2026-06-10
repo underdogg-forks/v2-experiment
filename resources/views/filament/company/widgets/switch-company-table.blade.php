@@ -1,2 +1,0 @@
-
-<livewire:switch-company />

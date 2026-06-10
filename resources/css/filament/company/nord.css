@@ -318,3 +318,21 @@
 .fi-main {
     @apply bg-[#ECEFF4] dark:bg-[#2E3440];
 }
+
+.fi-simple-main-ctn {
+    @apply bg-[#3B4252];
+}
+
+/* Override colors for login page elements */
+.fi-simple-main-ctn .fi-btn.fi-color-primary {
+    background-color: #429AE1 !important;
+}
+.fi-simple-main-ctn .fi-btn.fi-color-primary:hover {
+    background-color: #3289d0 !important;
+}
+.fi-simple-main-ctn a {
+    color: #429AE1 !important;
+}
+.fi-simple-main-ctn a:hover {
+    color: #3289d0 !important;
+}

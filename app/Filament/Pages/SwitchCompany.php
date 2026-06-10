@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Company;
+use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
@@ -29,8 +30,8 @@ class SwitchCompany extends Page implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('name')
                     ->label('Company Name'),
             ])
-            ->actions([
-                Tables\Actions\Action::make('switch')
+            ->recordActions([
+                Action::make('switch')
                     ->label('Switch')
                     ->action(function (Company $record) {
                         session(['current_company_id' => $record->id]);
