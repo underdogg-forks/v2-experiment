@@ -16,6 +16,8 @@ use Modules\Core\Models\Company;
 
 class CompanyResource extends Resource
 {
+    protected static ?string $tenantOwnershipRelationshipName = null;
+
     protected static ?string $model = Company::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

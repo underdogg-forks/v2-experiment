@@ -103,6 +103,11 @@ class Company extends Model
         return $this->hasMany(Client::class);
     }
 
+    public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'id', 'id');
+    }
+
     public function custom_fields(): HasMany
     {
         return $this->hasMany(CustomField::class);
