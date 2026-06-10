@@ -1,57 +1,62 @@
-# =======================================================
-#  CodeRabbit AI Review Configuration
-#  For Laravel + JS projects
-#  Reference: https://docs.coderabbit.ai/config
-# =======================================================
-
 language: en-US
-
+tone_instructions: ''
+early_access: false
+enable_free_tier: true
 reviews:
-  # Only review PHP files; exclude markdown, lock files, and package manifests
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: false
+  high_level_summary_placeholder: '`@coderabbitai` summary'
+  auto_title_placeholder: '`@coderabbitai`'
+  review_status: false
+  review_details: false
+  commit_status: false
+  fail_commit_status: false
+  collapse_walkthrough: false
+  changed_files_summary: true
+  sequence_diagrams: false
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  labeling_instructions: []
+  auto_apply_labels: false
+  suggested_reviewers: true
+  auto_assign_reviewers: false
+  poem: false
+  enable_prompt_for_ai_agents: true
   path_filters:
-    - "**/*.php"
-    - "!**/*.md"
-    - "!**/package.json"
-    - "!**/yarn.lock"
-    # --- ignored files -----------------------------------------------------------
-    - "!.claude/skills/tailwindcss-development/SKILL.md"
-    - "!.coderabbit.yml"
-    - "!.env.example"
-    - "!.env.testing.example"
-    - "!.github/scripts/parse-phpstan-results.php"
-    - "!.github/workflows/phpstan.yml"
-    - "!.github/workflows/pint.yml"
-    - "!.gitignore"
-    - "!.mcp.json"
-    - "!CLAUDE.md"
-    - "!Makefile"
-    - "!env.example.txt"
-    - "!package.json"
-    - "!phpstan.neon"
-    - "!phpunit.xml"
-    - "!rector.php"
-    - "!resources/css/app.css"
-    - "!resources/css/filament/admin/nord.css"
-    - "!resources/css/filament/company/nord.css"
-    - "!resources/views/filament/company/widgets/switch-company-table.blade.php"
-    - "!vite.config.js"
-    # -----------------------------------------------------------------------------
-
+    - '**/*.php'
+    - '!**/*.md'
+    - '!**/package.json'
+    - '!**/yarn.lock'
+    - '!.coderabbit.yml'
+    - '!.env.example'
+    - '!.env.testing.example'
+    - '!.gitignore'
+    - '!CLAUDE.md'
+    - '!Makefile'
+    - '!phpstan.neon'
+    - '!phpunit.xml'
+    - '!rector.php'
+    - '!resources/css/app.css'
+    - '!vite.config.js'
   path_instructions:
-    - path: "Modules/**"
-      instructions: >
-        This project uses a modular architecture under Modules/*.
-        Each module lives in Modules/<name>/ and follows this layout:
-          src/Models/        — Eloquent models (namespace Modules\<Name>\Models)
+    - path: Modules/**
+      instructions: |
+        This project uses a modular architecture under Modules/*. Each module
+        lives in Modules/<name>/ and follows this layout:
+          src/Models/         — Eloquent models (namespace Modules\<Name>\Models)
           src/Filament/Resources/<Group>/  — Filament v5 CRUD resources;
             each Resource delegates form/table to Schemas/ and Tables/ classes
-          src/Services/      — Service classes
-          src/Providers/     — Laravel ServiceProvider
-          src/Enums/         — PHP 8.1 backed enums (core module only)
-          src/Contracts/     — Interfaces (core module only)
+          src/Services/       — Service classes
+          src/Providers/      — Laravel ServiceProvider
+          src/Enums/          — PHP 8.1 backed enums (core module only)
+          src/Contracts/      — Interfaces (core module only)
           database/factories/ — Eloquent factories (namespace Modules\<Name>\Database\Factories)
           database/migrations/ — module-scoped migrations
-          tests/Feature/     — PHPUnit feature tests using #[Test] and #[Group] attributes
+          tests/Feature/      — PHPUnit feature tests using #[Test] and #[Group] attributes
 
         Key conventions:
         - Namespaces follow PSR-4: Modules\<Name>\* mapped from Modules/<name>/src/
@@ -60,168 +65,143 @@ reviews:
         - No inline form/table definitions inside the Resource class itself
         - All PHP files must pass php -l and vendor/bin/pint --dirty
         - All new models should have a corresponding factory in database/factories/
-
-    - path: "app/**"
-      instructions: >
+    - path: app/**
+      instructions: |
         The app/ directory is intentionally minimal — only framework bootstrap
-        files remain here. Almost all business logic lives in Modules/*.
-        Flag any new models, Enums, or Filament Resources added directly to app/
-        as misplaced; they belong in the appropriate Modules/<name>/ directory.
-
-    - path: "Modules/*/tests/**"
-      instructions: >
-        Feature tests use PHPUnit with Pest-compatible #[Test] and #[Group] attributes.
-        Tests must authenticate a Modules\Core\Models\User and attach a
-        Modules\Core\Models\Company tenant before exercising Filament resources.
-        Use RefreshDatabase. Factories live in Modules\<Name>\Database\Factories\.
-
-  # Review tone — defines style of feedback
-  # Options: assertive | chill | friendly | strict | concise | detailed
-  profile: assertive
-
-  # Require resolution before merge
-  request_changes_workflow: true
-
-  # Include an AI summary of the PR
-  high_level_summary: false
-
-  # Report check status to GitHub UI
-  review_status: false
-  commit_status: false
-  fail_commit_status: false
-
-  # --- collapsible: UI / Fun / Optional ------------------------------------------------
-  collapse_walkthrough: false
-  sequence_diagrams: false
-  estimate_code_review_effort: true
-  in_progress_fortune: false
-  poem: false
-  # ------------------------------------------------------------------------------------
-
+        files remain here. Almost all business logic lives in Modules/*. Flag
+        any new models, Enums, or Filament Resources added directly to app/ as
+        misplaced; they belong in the appropriate Modules/<name>/ directory.
+    - path: Modules/*/tests/**
+      instructions: |
+        Feature tests use PHPUnit with Pest-compatible #[Test] and #[Group]
+        attributes. Tests must authenticate a Modules\Core\Models\User and
+        attach a Modules\Core\Models\Company tenant before exercising Filament
+        resources. Use RefreshDatabase. Factories live in
+        Modules\<Name>\Database\Factories\.
+  abort_on_close: true
+  disable_cache: false
+  slop_detection:
+    enabled: true
   auto_review:
     enabled: false
     auto_incremental_review: true
-    # --- collapsible: customization ----------------------------------------------------
-    ignore_title_keywords: ['WIP', 'draft']
-    labels: ['needs-review']
+    auto_pause_after_reviewed_commits: 5
+    ignore_title_keywords:
+      - WIP
+      - draft
+    labels:
+      - needs-review
     drafts: false
-    base_branches: ['master', 'development']
-    ignore_usernames: ['dependabot', 'renovate']
-    # ------------------------------------------------------------------------------------
-
-  # --- collapsible: doc/test auto-suggestions ------------------------------------------
+    base_branches:
+      - master
+      - development
+    ignore_usernames:
+      - dependabot
+      - renovate
   finishing_touches:
     docstrings:
       enabled: false
     unit_tests:
       enabled: false
-  # ------------------------------------------------------------------------------------
-
-  # --- collapsible: pre-merge quality gates --------------------------------------------
+    simplify:
+      enabled: false
   pre_merge_checks:
     docstrings:
       mode: warning
       threshold: 80
     title:
       mode: warning
-      requirements: 'Descriptive, mentions component or ticket'
+      requirements: Descriptive, mentions component or ticket
     description:
       mode: warning
-  # ------------------------------------------------------------------------------------
-
-tools:
-  # --- Core linters for Laravel (PHP) and JS -------------------------------------------
-  phpstan:
-    enabled: true
-    level: "3"
-  phpcs:
-    enabled: true
-  eslint:
-    enabled: true
-  markdownlint:
-    enabled: true
-
-  # --- collapsible: supporting & infra tools -------------------------------------------
-  shellcheck:
-    enabled: false
-  hadolint:
-    enabled: false
-  yamllint:
-    enabled: false
-  dotenvLint:
-    enabled: false
-  htmlhint:
-    enabled: false
-  semgrep:
-    enabled: false
-  gitleaks:
-    enabled: false
-  osvScanner:
-    enabled: false
-  actionlint:
-    enabled: true
-  # ------------------------------------------------------------------------------------
-
+    issue_assessment:
+      mode: warning
+  # ✅ tools belongs here, under reviews — NOT at the top level
+  tools:
+    ast-grep:
+      essential_rules: true
+    phpstan:
+      enabled: true
+      level: '3'            # overridden from default → 3
+    phpcs:
+      enabled: true
+    phpmd:
+      enabled: true
+    eslint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    shellcheck:
+      enabled: false        # disabled
+    hadolint:
+      enabled: false        # disabled
+    yamllint:
+      enabled: false        # disabled
+    dotenvLint:
+      enabled: false        # disabled
+    htmlhint:
+      enabled: false        # disabled
+    semgrep:
+      enabled: false        # disabled
+    gitleaks:
+      enabled: false        # disabled
+    osvScanner:
+      enabled: false        # disabled
+    actionlint:
+      enabled: true
+    github-checks:
+      enabled: true
+      timeout_ms: 90000
+    languagetool:
+      enabled: true
+      level: default
+    biome:
+      enabled: true
+    trufflehog:
+      enabled: true
+    ruff:
+      enabled: true
 chat:
-  # --- collapsible: personality + integrations -----------------------------------------
-  art: false
+  allow_non_org_members: true
   auto_reply: true
   integrations:
     jira:
       usage: disabled
     linear:
       usage: disabled
-  # ------------------------------------------------------------------------------------
-
-# --- collapsible: AI learning + docs integration ---------------------------------------
 knowledge_base:
   opt_out: true
   web_search:
     enabled: false
   code_guidelines:
     enabled: false
-    filePatterns: ['CONTRIBUTING.md', 'docs/code-guidelines.md']
   learnings:
     scope: global
   issues:
     scope: global
   pull_requests:
     scope: global
-# ---------------------------------------------------------------------------------------
-
-# --- collapsible: AI code generation suggestions ---------------------------------------
 code_generation:
-  docstrings:
-    language: en-US
-
   unit_tests:
     path_instructions:
-      - path: 'Modules/*/tests/Unit/**'
-        instructions: |
-          Each test method must begin with `it_` and is in snake_case.
-          Annotate each test method with `#[Test]`.
-          Each test method must contain `$this->markTestIncomplete();` by default.
-          Prefer Fakes and Fixtures over Mocks.
-          Structure tests with `it_` functions and place happy paths last.
-          Reusable logic (e.g., fixtures) must reside in an abstract test case.
-      - path: 'Modules/*/tests/Feature/**'
+      - path: Modules/*/tests/Feature/**
         instructions: |
           Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Default to `$this->markTestIncomplete();` until test logic is finalized.
           Use RefreshDatabase and authenticate via Modules\Core\Models\User::factory().
           Avoid inline fixture setup; use factories and seeders.
-      - path: 'tests/Unit/**'
+      - path: Modules/*/tests/Unit/**
         instructions: |
           Each test method must begin with `it_` and is in snake_case.
           Annotate each test method with `#[Test]`.
           Each test method must contain `$this->markTestIncomplete();` by default.
           Prefer Fakes and Fixtures over Mocks.
-      - path: 'tests/Feature/**'
-        instructions: |
-          Each test method must begin with `it_` and is in snake_case.
-          Annotate each test method with `#[Test]`.
-          Default to `$this->markTestIncomplete();` until test logic is finalized.
-          Use Laravel's HTTP helpers (`->postJson()`, `->getJson()`, etc.).
-          Avoid inline fixture setup; use factories and seeders.
-# ---------------------------------------------------------------------------------------
+          Reusable logic (e.g., fixtures) must reside in an abstract test case.
+issue_enrichment:
+  auto_enrich:
+    enabled: false
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: true
