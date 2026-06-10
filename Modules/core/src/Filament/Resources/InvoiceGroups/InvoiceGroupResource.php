@@ -3,7 +3,7 @@
 namespace Modules\Core\Filament\Resources\InvoiceGroups;
 
 use BackedEnum;
-use Filament\Resources\Resource;
+use Modules\Core\Filament\Resources\BaseResource as Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -12,7 +12,7 @@ use Modules\Core\Filament\Resources\InvoiceGroups\Pages\EditInvoiceGroup;
 use Modules\Core\Filament\Resources\InvoiceGroups\Pages\ListInvoiceGroups;
 use Modules\Core\Filament\Resources\InvoiceGroups\Schemas\InvoiceGroupForm;
 use Modules\Core\Filament\Resources\InvoiceGroups\Tables\InvoiceGroupsTable;
-use Modules\Invoices\Models\InvoiceGroup;
+use Modules\Core\Models\InvoiceGroup;
 
 class InvoiceGroupResource extends Resource
 {

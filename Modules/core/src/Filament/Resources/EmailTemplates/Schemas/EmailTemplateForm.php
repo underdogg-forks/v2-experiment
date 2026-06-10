@@ -12,11 +12,11 @@ class EmailTemplateForm
     {
         return $schema
             ->components([
-                Textarea::make('email_template_title')
-                    ->required()
-                    ->columnSpanFull(),
-                TextInput::make('email_template_type')
+                TextInput::make('email_template_title')
                     ->required(),
+                TextInput::make('email_template_type')
+                    ->required()
+                    ->default(null),
                 Textarea::make('email_template_body')
                     ->required()
                     ->columnSpanFull(),

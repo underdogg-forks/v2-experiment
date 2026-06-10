@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Company;
+use Modules\Core\Traits\TenantAware;
 use Modules\Core\Models\TaxRate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Expenses\Models\ExpenseItem;
@@ -42,6 +43,7 @@ use Modules\Quotes\Models\QuoteItemAmount;
 class Product extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 

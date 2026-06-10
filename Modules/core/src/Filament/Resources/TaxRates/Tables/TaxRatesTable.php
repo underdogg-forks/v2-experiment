@@ -14,8 +14,9 @@ class TaxRatesTable
     {
         return $table
             ->columns([
-                TextColumn::make('company.name')
-                    ->searchable(),
+                TextColumn::make('tax_rate_name')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('tax_rate_percent')
                     ->numeric()
                     ->sortable(),

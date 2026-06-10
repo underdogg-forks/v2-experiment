@@ -17,7 +17,7 @@ class PaymentFactory extends Factory
             'payment_method_id' => 1,
             'payment_date'      => now(),
             'payment_amount'    => fake()->randomFloat(2, 10, 1000),
-            'payment_note'      => fake()->optional()->sentence(),
+            'payment_note'      => fake()->optional()->sentence() ?? '',
         ];
     }
 }

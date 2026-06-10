@@ -3,7 +3,8 @@
 namespace Modules\Quotes\Filament\Resources\Quotes;
 
 use BackedEnum;
-use Filament\Resources\Resource;
+use Filament\Facades\Filament;
+use Modules\Core\Filament\Resources\BaseResource as Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -28,6 +29,20 @@ class QuoteResource extends Resource
     public static function table(Table $table): Table
     {
         return QuotesTable::configure($table);
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data = parent::mutateFormDataBeforeCreate($data);
+
+        $data['user_id']              ??= Filament::auth()->user()?->getKey();
+        $data['invoice_id']           ??= 0;
+        $data['quote_date_expires']   ??= now()->addDays(30)->toDateString();
+        $data['quote_date_created']   ??= now()->toDateString();
+        $data['quote_date_modified']  ??= now();
+        $data['quote_url_key']        ??= \Illuminate\Support\Str::random(32);
+
+        return $data;
     }
 
     public static function getRelations(): array

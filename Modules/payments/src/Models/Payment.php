@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Core\Models\Company;
+use Modules\Core\Traits\TenantAware;
 use Modules\Invoices\Models\Invoice;
 
 /**
@@ -27,6 +28,7 @@ use Modules\Invoices\Models\Invoice;
 class Payment extends Model
 {
     use HasFactory;
+    use TenantAware;
 
     public $timestamps = false;
 
