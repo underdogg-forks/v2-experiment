@@ -3,14 +3,14 @@
 namespace Tests;
 
 use Filament\Facades\Filament;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Core\Models\Company;
 use Modules\Core\Models\User;
 use Tests\TestCase;
 
 abstract class AbstractCompanyPanelTestCase extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
 
     protected $company;
     protected $client;

@@ -40,7 +40,7 @@ class PaymentTest extends TestCase
         $this->company = Company::factory()->create();
         Filament::setTenant($this->company, isQuiet: true);
         $this->user = User::factory()->create();
-        $this->user->companies()->attach($this->company->id);
+        $this->user->companies()->syncWithoutDetaching([$this->company->id]);
 
         $client       = Client::factory()->create(['company_id' => $this->company->id]);
         $invoiceGroup = InvoiceGroup::factory()->create(['company_id' => $this->company->id]);

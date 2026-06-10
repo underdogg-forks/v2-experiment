@@ -14,6 +14,8 @@ class EmailTemplatesTable
     {
         return $table
             ->columns([
+                TextColumn::make('email_template_title')
+                    ->searchable(),
                 TextColumn::make('email_template_type')
                     ->searchable(),
                 TextColumn::make('email_template_pdf_template')

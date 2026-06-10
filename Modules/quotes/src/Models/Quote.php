@@ -49,6 +49,10 @@ class Quote extends Model
 
     public $timestamps = false;
 
+    protected $table = 'quotes';
+
+    protected $primaryKey = 'quote_id';
+
     protected $casts = [
         'company_id'             => 'int',
         'invoice_id'             => 'int',

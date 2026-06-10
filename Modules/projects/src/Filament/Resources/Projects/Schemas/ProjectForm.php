@@ -2,9 +2,11 @@
 
 namespace Modules\Projects\Filament\Resources\Projects\Schemas;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Modules\Clients\Models\Client;
 
 class ProjectForm
 {
@@ -12,13 +14,14 @@ class ProjectForm
     {
         return $schema
             ->components([
-                Select::make('company_id')
-                    ->relationship('company', 'name')
-                    ->required(),
                 Select::make('client_id')
-                    ->relationship('client', 'client_id')
+                    ->options(fn () => Client::query()
+                        ->where('company_id', Filament::getTenant()?->id)
+                        ->pluck('client_name', 'client_id'))
+                    ->searchable()
                     ->required(),
                 Textarea::make('project_name')
+                    ->required()
                     ->default(null)
                     ->columnSpanFull(),
             ]);
