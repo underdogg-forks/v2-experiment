@@ -20,11 +20,11 @@ This reviewer MUST delegate evaluation to existing skills:
 Delegate to:
 
 - application-architecture-standard
-- service-layer
-- laravel-modules
-- non-standard-pks
-- dto-contract
-- safe-refactoring-rules
+- service-layer skill
+- laravel-modules skill
+- non-standard-pks skill
+- dto-contract skill
+- safe-refactoring-rules skill
 
 ## Tests
 Use:
@@ -33,7 +33,7 @@ Use:
 
 ## Security
 Use:
-- (if exists) security-review skill
+- security-review skill
 - otherwise infer from architecture + test gaps
 
 ---
