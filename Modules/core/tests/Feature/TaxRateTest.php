@@ -130,7 +130,9 @@ class TaxRateTest extends TestCase
         /* Arrange */
         $companyB = Company::factory()->create();
         TaxRate::factory()->create(['company_id' => $this->company->id, 'tax_rate_name' => 'VISIBLE']);
+        Filament::setTenant($companyB, isQuiet: true);
         TaxRate::factory()->create(['company_id' => $companyB->id, 'tax_rate_name' => 'HIDDEN']);
+        Filament::setTenant($this->company, isQuiet: true);
 
         /* Act */
         $component = Livewire::actingAs($this->user)

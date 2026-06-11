@@ -37,7 +37,7 @@ class InvoiceTest extends TestCase
         Filament::setCurrentPanel(Filament::getPanel('company'));
         Filament::bootCurrentPanel();
 
-        $this->company      = Company::factory()->create();
+        $this->company = Company::factory()->create();
         Filament::setTenant($this->company, isQuiet: true);
         $this->client       = Client::factory()->create(['company_id' => $this->company->id]);
         $this->invoiceGroup = InvoiceGroup::factory()->create(['company_id' => $this->company->id]);
@@ -148,8 +148,10 @@ class InvoiceTest extends TestCase
         $companyA = $this->company;
         $companyB = Company::factory()->create();
 
+        Filament::setTenant($companyB, isQuiet: true);
         $clientB       = Client::factory()->create(['company_id' => $companyB->id]);
         $invoiceGroupB = InvoiceGroup::factory()->create(['company_id' => $companyB->id]);
+        Filament::setTenant($companyA, isQuiet: true);
 
         $invoiceA = Invoice::factory()->create([
             'company_id'       => $companyA->id,
@@ -157,11 +159,13 @@ class InvoiceTest extends TestCase
             'invoice_group_id' => $this->invoiceGroup->invoice_group_id,
         ]);
 
+        Filament::setTenant($companyB, isQuiet: true);
         $invoiceB = Invoice::factory()->create([
             'company_id'       => $companyB->id,
             'client_id'        => $clientB->client_id,
             'invoice_group_id' => $invoiceGroupB->invoice_group_id,
         ]);
+        Filament::setTenant($companyA, isQuiet: true);
 
         Livewire::actingAs($this->user)
             ->test(ListInvoices::class, ['tenant' => $companyA])

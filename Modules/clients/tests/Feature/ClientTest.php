@@ -141,7 +141,9 @@ class ClientTest extends TestCase
         $companyB = Company::factory()->create();
 
         $clientA = Client::factory()->create(['company_id' => $companyA->id]);
+        Filament::setTenant($companyB, isQuiet: true);
         $clientB = Client::factory()->create(['company_id' => $companyB->id]);
+        Filament::setTenant($companyA, isQuiet: true);
 
         Livewire::actingAs($this->user)
             ->test(ListClients::class, ['tenant' => $companyA])
@@ -157,7 +159,9 @@ class ClientTest extends TestCase
         $companyB = Company::factory()->create();
 
         $clientA = Client::factory()->create(['company_id' => $companyA->id]);
+        Filament::setTenant($companyB, isQuiet: true);
         $clientB = Client::factory()->create(['company_id' => $companyB->id]);
+        Filament::setTenant($companyA, isQuiet: true);
 
         $results = Client::query()
             ->where('company_id', $companyA->id)

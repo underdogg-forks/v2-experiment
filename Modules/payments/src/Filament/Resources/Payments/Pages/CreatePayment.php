@@ -11,6 +11,13 @@ class CreatePayment extends CreateRecord
 {
     protected static string $resource = PaymentResource::class;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['payment_note'] ??= '';
+
+        return $data;
+    }
+
     protected function handleRecordCreation(array $data): Model
     {
         return app(PaymentService::class)->createPayment($data);
