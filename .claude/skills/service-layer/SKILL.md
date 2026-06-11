@@ -1,6 +1,6 @@
 ---
 name: service-layer
-description: "Implements Service classes for business logic. Activates when adding createX/updateX/deleteX methods, wiring a service into a Filament page, or when the user mentions Service class, InvoiceService, business logic, or handleRecordCreation."
+description: Defines application service structure and business orchestration boundaries
 license: MIT
 metadata:
   author: project
@@ -8,77 +8,94 @@ metadata:
 
 # Service Layer
 
-Every module has a single Service class that owns create/update/delete/list logic.
-Filament page classes call services via `app(InvoiceService::class)->createInvoice($data)`.
+Services define **business orchestration only**.
 
-## Convention
+They are framework-agnostic and represent the application’s business operations.
+
+---
+
+# 1. Responsibility
+
+Services MUST:
+
+- contain business logic
+- coordinate models and repositories
+- enforce domain rules
+- return models or DTOs
+
+Services MUST NOT:
+
+- use Filament
+- use HTTP layer
+- depend on request/response objects
+- contain UI logic
+- use service locators (`app()`, `resolve()`)
+
+---
+
+# 2. Dependency Rule
+
+Services MUST use constructor injection:
+
+```php
+public function __construct(
+    private InvoiceRepository $repository
+) {}
+```
+
+No `app()` or service locator usage inside services.
+
+---
+
+# 3. Filament Boundary Rule
+
+Filament is a UI boundary layer with different lifecycle constraints.
+
+Allowed patterns:
+
+### Pages / Resources
+- constructor injection preferred
+- `app(Service::class)` allowed as fallback
+
+### Table Actions / Closures
+- `app(Service::class)` is allowed
+- constructor injection is not guaranteed in closures
+
+Example:
+
+```php
+Action::make('create')
+    ->action(function (array $data) {
+        app(InvoiceService::class)->createInvoice($data);
+    });
+```
+
+This is acceptable UI-layer coupling.
+
+---
+
+# 4. Standard Service Shape
 
 ```
 Modules/{Name}/src/Services/{Model}Service.php
-namespace Modules\{Name}\Services;
 ```
 
-## Standard Shape
+---
 
-```php
-namespace Modules\Invoices\Services;
+# 5. Standard Methods
 
-use Modules\Invoices\Models\Invoice;
-use Illuminate\Database\Eloquent\Collection;
+- createX
+- updateX
+- deleteX
+- findOrFail
+- listForCompany
 
-class InvoiceService
-{
-    public function createInvoice(array $data): Invoice
-    {
-        return Invoice::query()->create($data);
-    }
+---
 
-    public function updateInvoice(Invoice $invoice, array $data): Invoice
-    {
-        $invoice->update($data);
-        return $invoice->fresh();
-    }
+# 6. Core Principle
 
-    public function deleteInvoice(Invoice $invoice): bool
-    {
-        return (bool) $invoice->delete();
-    }
+Services are pure business units.
 
-    public function listForCompany(int $companyId): Collection
-    {
-        return Invoice::query()->where('company_id', $companyId)->get();
-    }
+They must not depend on framework execution context.
 
-    public function findOrFail(int $invoiceId): Invoice
-    {
-        /** @var Invoice */
-        return Invoice::query()->findOrFail($invoiceId);
-    }
-}
-```
-
-## Wiring into Filament Pages
-
-```php
-// CreateInvoice.php
-protected function handleRecordCreation(array $data): Model
-{
-    return app(InvoiceService::class)->createInvoice($data);
-}
-
-// EditInvoice.php
-protected function handleRecordUpdate(Model $record, array $data): Model
-{
-    return app(InvoiceService::class)->updateInvoice($record, $data);
-}
-```
-
-## Rules
-
-- No static methods — always instantiate via `app()` or constructor injection.
-- No business logic in Page classes — move it to the Service.
-- No Filament imports in Service classes — they must be framework-agnostic.
-- `mutateFormDataBefore*` stays in the Page class (it's Filament infrastructure,
-  not business logic).
-- Services do not register themselves — no service provider binding needed for
-  simple services resolved by `app()`.
+UI layers may use service locator as a pragmatic boundary escape hatch.
