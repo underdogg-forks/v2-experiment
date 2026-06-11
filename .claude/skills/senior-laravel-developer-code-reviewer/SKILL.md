@@ -1,5 +1,5 @@
 ---
-name: senior-laravel-developer-review
+name: senior-laravel-developer-code-reviewer
 description: "Creates a code-review by senior Laravel developer, heavily focusing on amazing phpunit tests"
 ---
 
