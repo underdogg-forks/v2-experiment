@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('payment_custom_fieldid');
             $table->text('payment_custom_fieldvalue')->nullable();
 
-            $table->unique(['payment_id', 'payment_custom_fieldid'], 'payment_id');
+            $table->unique(['payment_id', 'payment_custom_fieldid'], 'payment_custom_id_fieldid_unique');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('payment_id')->references('payment_id')->on('payments')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_payment_custom');
+        Schema::dropIfExists('payment_custom');
     }
 };

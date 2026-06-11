@@ -1,2 +1,283 @@
 parameters:
-	ignoreErrors: []
+	ignoreErrors:
+		-
+			message: '#^PHPDoc type string of property Modules\\Clients\\Database\\Factories\\ClientCustomFactory\:\:\$model is not covariant with PHPDoc type class\-string\<Modules\\Clients\\Models\\ClientCustom\> of overridden property Illuminate\\Database\\Eloquent\\Factories\\Factory\<Modules\\Clients\\Models\\ClientCustom\>\:\:\$model\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: Modules/clients/database/factories/ClientCustomFactory.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$client_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/clients/tests/Feature/ClientTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/clients/tests/Feature/ClientTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/clients/tests/Feature/ClientTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Testing\\TestResponse\:\:assertCanSeeTableRecords\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/clients/tests/Feature/ClientTest.php
+
+		-
+			message: '#^Class Modules\\Invoices\\Models\\InvoiceGroup not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: Modules/core/src/Filament/Resources/InvoiceGroups/InvoiceGroupResource.php
+
+		-
+			message: '#^Static property Modules\\Core\\Filament\\Resources\\InvoiceGroups\\InvoiceGroupResource\:\:\$model \(class\-string\<Illuminate\\Database\\Eloquent\\Model\>\|null\) does not accept default value of type string\.$#'
+			identifier: property.defaultValue
+			count: 1
+			path: Modules/core/src/Filament/Resources/InvoiceGroups/InvoiceGroupResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email_template_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/core/tests/Feature/EmailTemplateTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\EmailTemplateTest\:\:\$company \(Modules\\Core\\Models\\Company\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/EmailTemplateTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\EmailTemplateTest\:\:\$user \(Modules\\Core\\Models\\User\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/EmailTemplateTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/core/tests/Feature/InvoiceGroupTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$invoice_group_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/core/tests/Feature/InvoiceGroupTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\InvoiceGroupTest\:\:\$company \(Modules\\Core\\Models\\Company\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/InvoiceGroupTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\InvoiceGroupTest\:\:\$user \(Modules\\Core\\Models\\User\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/InvoiceGroupTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/core/tests/Feature/TaxRateTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$tax_rate_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/core/tests/Feature/TaxRateTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\TaxRateTest\:\:\$company \(Modules\\Core\\Models\\Company\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/TaxRateTest.php
+
+		-
+			message: '#^Property Modules\\Core\\Tests\\Feature\\TaxRateTest\:\:\$user \(Modules\\Core\\Models\\User\) does not accept Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: Modules/core/tests/Feature/TaxRateTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 6
+			path: Modules/expenses/tests/Feature/ExpenseTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/expenses/tests/Feature/ExpenseTest.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase\:\:actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/expenses/tests/Feature/ExpenseTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$client_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 6
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$invoice_group_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$invoice_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Testing\\TestResponse\:\:assertCanSeeTableRecords\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/invoices/tests/Feature/InvoiceTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$client_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 6
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$invoice_group_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$invoice_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$payment_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase\:\:actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/payments/tests/Feature/PaymentTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: Modules/products/tests/Feature/ProductTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/products/tests/Feature/ProductTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/products/tests/Feature/ProductTest.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase\:\:actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/products/tests/Feature/ProductTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: Modules/projects/tests/Feature/ProjectTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$project_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/projects/tests/Feature/ProjectTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/projects/tests/Feature/ProjectTest.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase\:\:actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/projects/tests/Feature/ProjectTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/quotes/tests/Feature/QuoteTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quote_id\.$#'
+			identifier: property.notFound
+			count: 4
+			path: Modules/quotes/tests/Feature/QuoteTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:companies\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: Modules/quotes/tests/Feature/QuoteTest.php
+
+		-
+			message: '#^Parameter \#1 \$user of method Illuminate\\Foundation\\Testing\\TestCase\:\:actingAs\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: Modules/quotes/tests/Feature/QuoteTest.php

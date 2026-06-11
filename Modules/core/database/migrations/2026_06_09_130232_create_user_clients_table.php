@@ -13,7 +13,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('user_id');
 
-            $table->index(['user_id', 'client_id'], 'user_id');
+            $table->index(['user_id', 'client_id'], 'user_clients_user_client_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_user_clients');
+        Schema::dropIfExists('user_clients');
     }
 };

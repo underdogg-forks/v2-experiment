@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('invoice_custom_fieldid');
             $table->text('invoice_custom_fieldvalue')->nullable();
 
-            $table->unique(['invoice_id', 'invoice_custom_fieldid'], 'invoice_id');
+            $table->unique(['invoice_id', 'invoice_custom_fieldid'], 'invoice_custom_id_fieldid_unique');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('invoice_id')->references('invoice_id')->on('invoices')->onDelete('cascade');
         });
@@ -22,6 +22,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_custom');
+        Schema::dropIfExists('invoice_custom');
     }
 };

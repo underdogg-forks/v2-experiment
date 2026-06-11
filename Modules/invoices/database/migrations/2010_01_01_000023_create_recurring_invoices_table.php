@@ -10,7 +10,7 @@ return new class () extends Migration {
         Schema::create('invoices_recurring', static function (Blueprint $table) {
             $table->unsignedBigInteger('invoice_recurring_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('invoice_id')->index('invoice_id');
+            $table->unsignedBigInteger('invoice_id')->index('recurring_invoices_invoice_id_index');
             $table->date('recur_start_date');
             $table->date('recur_end_date')->nullable();
             $table->string('recur_frequency')->comment('enum!');
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoices_recurring');
+        Schema::dropIfExists('invoices_recurring');
     }
 };

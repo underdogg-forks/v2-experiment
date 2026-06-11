@@ -26,7 +26,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('item_product_unit_id')->nullable();
             $table->date('item_date')->nullable();
 
-            $table->index(['invoice_id', 'item_tax_rate_id', 'item_date_added', 'item_order'], 'invoice_id');
+            $table->index(['invoice_id', 'item_tax_rate_id', 'item_date_added', 'item_order'], 'invoice_items_composite_index');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('invoice_id')->references('invoice_id')->on('invoices')->onDelete('cascade');
             $table->foreign('item_tax_rate_id')->references('tax_rate_id')->on('tax_rates')->onDelete('cascade');
@@ -38,6 +38,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoice_items');
+        Schema::dropIfExists('invoice_items');
     }
 };

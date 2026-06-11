@@ -10,11 +10,11 @@ return new class () extends Migration {
         Schema::create('quotes', static function (Blueprint $table) {
             $table->unsignedBigInteger('quote_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('invoice_id')->default(0)->index('invoice_id');
+            $table->unsignedBigInteger('invoice_id')->default(0)->index('quotes_invoice_id_index');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('invoice_group_id');
-            $table->tinyInteger('quote_status_id')->default(1)->index('quote_status_id')->comment('enum!');
+            $table->tinyInteger('quote_status_id')->default(1)->index('quotes_status_id_index')->comment('enum!');
             $table->date('quote_date_expires');
             $table->string('quote_number', 100)->nullable();
             $table->decimal('quote_discount_amount', 20)->nullable();
@@ -25,7 +25,7 @@ return new class () extends Migration {
             $table->date('quote_date_created');
             $table->dateTime('quote_date_modified');
 
-            $table->index(['user_id', 'client_id', 'invoice_group_id', 'quote_date_created', 'quote_date_expires', 'quote_number'], 'user_id');
+            $table->index(['user_id', 'client_id', 'invoice_group_id', 'quote_date_created', 'quote_date_expires', 'quote_number'], 'quotes_composite_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('cascade');
@@ -36,6 +36,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_quotes');
+        Schema::dropIfExists('quotes');
     }
 };

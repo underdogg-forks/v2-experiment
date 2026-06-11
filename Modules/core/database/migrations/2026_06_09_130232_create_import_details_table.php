@@ -14,13 +14,13 @@ return new class () extends Migration {
             $table->string('import_table_name', 35);
             $table->integer('import_record_id');
 
-            $table->index(['import_id', 'import_record_id'], 'import_id');
+            $table->index(['import_id', 'import_record_id'], 'import_details_import_record_index');
             $table->foreign('import_id')->references('import_id')->on('imports')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_import_details');
+        Schema::dropIfExists('import_details');
     }
 };

@@ -13,7 +13,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('invoice_group_id');
             $table->unsignedBigInteger('user_id');
-            $table->tinyInteger('invoice_status_id')->default(1)->index('invoice_status_id')->comment('enum!');
+            $table->tinyInteger('invoice_status_id')->default(1)->index('invoices_status_id_index')->comment('enum!');
             $table->boolean('is_read_only')->nullable();
             $table->string('invoice_password', 90)->nullable();
             $table->date('invoice_date_created');
@@ -28,7 +28,7 @@ return new class () extends Migration {
             $table->integer('payment_method')->default(0)->comment('enum!');
             $table->unsignedBigInteger('creditinvoice_parent_id')->nullable();
 
-            $table->index(['user_id', 'client_id', 'invoice_group_id', 'invoice_date_created', 'invoice_date_due', 'invoice_number'], 'user_id');
+            $table->index(['user_id', 'client_id', 'invoice_group_id', 'invoice_date_created', 'invoice_date_due', 'invoice_number'], 'invoices_composite_index');
 
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('cascade');
@@ -40,6 +40,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_invoices');
+        Schema::dropIfExists('invoices');
     }
 };

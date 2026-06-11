@@ -19,6 +19,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_custom_values');
+        Schema::dropIfExists('custom_values');
     }
 };

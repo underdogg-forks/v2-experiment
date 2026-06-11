@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Models\Company;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Filament\Actions\Testing\TestAction;
 use Livewire\Livewire;
+use Modules\Core\Models\Company;
+use Modules\Core\Models\User;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
+use Tests\AbstractCompanyPanelTestCase;
 
-class SwitchCompanyTest extends TestCase
+class SwitchCompanyTest extends AbstractCompanyPanelTestCase
 {
-    use RefreshDatabase;
 
     #[Test]
     public function it_can_switch_company(): void
@@ -23,16 +22,15 @@ class SwitchCompanyTest extends TestCase
 
         $this->actingAs($user);
 
-        // Set initial company
         $initialCompany = $companies->first();
         session(['current_company_id' => $initialCompany->id]);
 
         /* Act */
         $test = Livewire::test(\App\Filament\Pages\SwitchCompany::class)
-            ->callTableAction('switch', $companies->last());
+            ->callAction(TestAction::make('switch')->table($companies->last()));
 
         /* Assert */
-        $test->assertRedirect(route('filament.company.pages.dashboard', ['tenant' => $companies->last()->search_code]));
+        $test->assertRedirect(route('filament.company.home', ['tenant' => $companies->last()->search_code]));
         $this->assertEquals($companies->last()->id, session('current_company_id'));
     }
 
@@ -46,13 +44,12 @@ class SwitchCompanyTest extends TestCase
 
         $this->actingAs($user);
 
-        // Set initial company
         $initialCompany = $companies->first();
         session(['current_company_id' => $initialCompany->id]);
 
         /* Act & Assert */
         Livewire::test(\App\Filament\Pages\SwitchCompany::class)
-            ->assertActionDisabled('switch', $companies->first())
-            ->assertActionEnabled('switch', $companies->last());
+            ->assertTableActionDisabled('switch', $companies->first())
+            ->assertTableActionEnabled('switch', $companies->last());
     }
 }

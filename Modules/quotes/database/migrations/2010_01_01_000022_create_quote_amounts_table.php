@@ -10,7 +10,7 @@ return new class () extends Migration {
         Schema::create('quote_amounts', static function (Blueprint $table) {
             $table->unsignedBigInteger('quote_amount_id', true);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('quote_id')->index('quote_id');
+            $table->unsignedBigInteger('quote_id')->index('quote_amounts_quote_id_index');
             $table->decimal('quote_item_subtotal', 20)->nullable();
             $table->decimal('quote_item_tax_total', 20)->nullable();
             $table->decimal('quote_tax_total', 20)->nullable();
@@ -23,6 +23,6 @@ return new class () extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('ip_quote_amounts');
+        Schema::dropIfExists('quote_amounts');
     }
 };
