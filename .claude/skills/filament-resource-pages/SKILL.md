@@ -1,103 +1,126 @@
 ---
-name: filament-resource-pages
-description: "Implements Create, Edit, and List Filament resource pages. Activates when adding form logic, wiring a service class, setting default field values, handling record creation or updates, or when the user mentions CreateRecord, EditRecord, mutateFormData, handleRecordCreation, or handleRecordUpdate."
+name: service-layer
+description: Defines application service structure and business orchestration boundaries
 license: MIT
 metadata:
   author: project
 ---
 
-# Filament Resource Pages
+# Service Layer
 
-## Critical: Instance Methods, Not Static
+Services define business orchestration and are the primary boundary for business logic execution.
 
-In Filament v5, `mutateFormData*` and `handleRecord*` are **instance methods on
-the Page class**, not static methods on the Resource class. Defining them on the
-Resource has no effect.
+They are framework-agnostic and represent application behavior independent of UI or transport layers.
 
-```php
-// ✓ CORRECT — instance method on the Page class
-class CreateInvoice extends CreateRecord
-{
-    protected function mutateFormDataBeforeCreate(array $data): array { ... }
-    protected function handleRecordCreation(array $data): Model { ... }
-}
+---
 
-// ✗ WRONG — static on Resource (does nothing in Filament v5)
-class InvoiceResource extends Resource
-{
-    public static function mutateFormDataBeforeCreate(array $data): array { ... }
-}
-```
+# 1. Responsibility
 
-## mutateFormDataBeforeCreate
+Services MUST:
 
-Use `??=` to set defaults for fields not in the form (NOT NULL columns, generated
-values, system-assigned fields):
+- contain business logic
+- coordinate models and repositories
+- enforce domain rules
+- return models or internally used DTOs
+- encapsulate persistence logic
 
-```php
-protected function mutateFormDataBeforeCreate(array $data): array
-{
-    $data['user_id']               ??= Filament::auth()->user()?->getKey();
-    $data['invoice_date_created']  ??= now()->toDateString();
-    $data['invoice_time_created']  ??= now()->toTimeString();
-    $data['invoice_date_modified'] ??= now();
-    $data['invoice_date_due']      ??= now()->addDays(30)->toDateString();
-    $data['invoice_terms']         ??= '';
-    $data['invoice_url_key']       ??= \Illuminate\Support\Str::random(32);
-    $data['payment_method']        ??= 0;
+Services MUST NOT:
 
-    return $data;
-}
-```
+- use Filament
+- depend on HTTP layer (requests/responses)
+- contain UI logic
+- use service locators (`app()`, `resolve()`)
+- depend on transport concerns
 
-## mutateFormDataBeforeSave
+---
 
-Same pattern for Edit pages. Guard nullable text fields that are NOT NULL in the DB:
+# 2. Dependency Rule
+
+Services MUST use constructor injection:
 
 ```php
-protected function mutateFormDataBeforeSave(array $data): array
-{
-    $data['invoice_terms'] ??= '';
-
-    return $data;
-}
+public function __construct(
+    private InvoiceRepository $repository
+) {}
 ```
 
-## handleRecordCreation / handleRecordUpdate
+No service locator usage is allowed inside services.
 
-Delegate to a Service class instead of letting Filament call `Model::create` directly:
+---
+
+# 3. DTO Rule (Refined)
+
+DTOs are NOT required for UI → Service communication.
+
+DTO usage depends on coupling, not layer type:
+
+## DTOs are required when:
+- crossing system boundaries (API, external integrations, queues)
+- multiple consumers share a contract
+- transformation logic must be standardized
+- stability across versions is required
+
+## DTOs are NOT required when:
+- input originates from trusted UI layer (e.g. Filament Forms)
+- single consumer exists
+- payload is short-lived and not reused elsewhere
+
+### Rule of thumb:
+> DTOs exist to stabilize unstable or shared contracts, not to formalize trusted UI input.
+
+Services MAY still use DTOs internally if they improve clarity or structure.
+
+---
+
+# 4. Filament Boundary Rule
+
+Filament is a UI orchestration layer.
+
+## Allowed usage:
+
+### Pages / Resources
+- constructor injection preferred
+- `app(Service::class)` allowed as fallback when needed
+
+### Table Actions / Closures
+- `app(Service::class)` is allowed
+- constructor injection is not guaranteed in closure scope
+
+Example:
 
 ```php
-protected function handleRecordCreation(array $data): Model
-{
-    return app(InvoiceService::class)->createInvoice($data);
-}
-
-protected function handleRecordUpdate(Model $record, array $data): Model
-{
-    return app(InvoiceService::class)->updateInvoice($record, $data);
-}
+Action::make('create')
+    ->action(function (array $data) {
+        app(InvoiceService::class)->createInvoice($data);
+    });
 ```
 
-## Header Actions on Edit Pages
+This is acceptable boundary-layer behavior.
 
-```php
-protected function getHeaderActions(): array
-{
-    return [
-        DeleteAction::make(),
-    ];
-}
+---
+
+# 5. Standard Service Shape
+
+```
+Modules/{Name}/src/Services/{Model}Service.php
 ```
 
-## Common NOT NULL Traps
+---
 
-Models in this app have many NOT NULL columns with no DB default. Always check the
-migration and guard these in `mutateFormDataBefore*`:
+# 6. Standard Methods
 
-| Model    | Dangerous columns                                  |
-|----------|----------------------------------------------------|
-| Invoice  | user_id, invoice_terms, invoice_url_key, payment_method, invoice_time_created |
-| Quote    | user_id, quote_url_key                             |
-| Payment  | payment_note                                       |
-| Product  | product_description                                |
+- createX
+- updateX
+- deleteX
+- findOrFail
+- listForCompany
+
+---
+
+# 7. Core Principle
+
+Services are pure business units.
+
+They MUST remain independent of framework execution context.
+
+UI layers may use service locator as a pragmatic escape hatch where DI is not available.
