@@ -1,6 +1,6 @@
 ---
 name: filament-resource-testing
-description: "Tests Filament resources using Livewire and PHPUnit. Activates when writing or fixing tests for Filament Create/Edit/List pages, testing multi-tenant resource isolation, or when the user mentions Livewire::test, actingAs, assertCanSeeTableRecords, assertHasFormErrors, or callAction."
+description: Defines how Filament UI resources are tested using Livewire
 license: MIT
 metadata:
   author: project
@@ -8,155 +8,114 @@ metadata:
 
 # Filament Resource Testing
 
-## Test Setup Boilerplate
+## Purpose
 
-Every Filament feature test needs the panel booted and a tenant set:
+This skill defines **UI-level testing patterns for Filament resources only**.
 
-```php
-protected function setUp(): void
-{
-    parent::setUp();
+It validates:
+- Create/Edit/List pages
+- form interaction
+- Livewire-based UI flows
+- user-visible behavior
 
-    Filament::setCurrentPanel(Filament::getPanel('company'));
-    Filament::bootCurrentPanel();
+It does NOT define:
+- factories
+- tenancy rules
+- database integrity rules
+- security rules
+- primary key rules
 
-    $this->company     = Company::factory()->create();
-    Filament::setTenant($this->company, isQuiet: true);
+These are owned by other skills.
 
-    $this->invoiceGroup = InvoiceGroup::factory()->create(['company_id' => $this->company->id]);
-    $this->client       = Client::factory()->create(['company_id' => $this->company->id]);
-    $this->user         = User::factory()->create();
-    $this->user->companies()->syncWithoutDetaching([$this->company->id]);
-}
-```
+---
 
-## List Page
+# 1. Scope Rule
 
-```php
-public function it_lists_invoices(): void
-{
-    $invoices = Invoice::factory()->count(3)->create([
-        'company_id'       => $this->company->id,
-        'client_id'        => $this->client->client_id,
-        'invoice_group_id' => $this->invoiceGroup->invoice_group_id,
-    ]);
+This skill ONLY covers:
 
-    Livewire::actingAs($this->user)
-        ->test(ListInvoices::class, ['tenant' => $this->company])
-        ->assertSuccessful()
-        ->assertCanSeeTableRecords($invoices);
-}
-```
+- Filament Pages
+- Filament Actions
+- Livewire interactions
+- UI assertions
 
-## Create Page
+---
 
-Use `->set('data.field', value)` — **not** `->fillForm([])`:
+# 2. Test Structure Rule
 
-```php
-public function it_creates_an_invoice(): void
-{
-    Livewire::actingAs($this->user)
-        ->test(CreateInvoice::class, ['tenant' => $this->company])
-        ->set('data.client_id', $this->client->client_id)
-        ->set('data.invoice_group_id', $this->invoiceGroup->invoice_group_id)
-        ->set('data.invoice_date_created', now()->toDateString())
-        ->set('data.invoice_date_due', now()->addDays(30)->toDateString())
-        ->set('data.invoice_status_id', 1)
-        ->set('data.invoice_discount_amount', 0)
-        ->set('data.invoice_discount_percent', 0)
-        ->set('data.is_read_only', false)
-        ->call('create')
-        ->assertHasNoFormErrors();
+Each test MUST validate one UI behavior:
 
-    $this->assertDatabaseHas('invoices', [
-        'client_id'  => $this->client->client_id,
-        'company_id' => $this->company->id,
-    ]);
-}
-```
+- listing records
+- creating records
+- editing records
+- deleting records
+- validation errors
 
-## Validation Failure
+No multi-behavior tests allowed.
+
+---
+
+# 3. Livewire Execution Rule
+
+All Filament tests MUST use Livewire:
 
 ```php
-public function it_fails_without_required_fields(): void
-{
-    Livewire::actingAs($this->user)
-        ->test(CreateInvoice::class, ['tenant' => $this->company])
-        ->set('data.client_id', null)
-        ->call('create')
-        ->assertHasFormErrors(['client_id' => 'required']);
-}
+Livewire::actingAs($this->user)
+    ->test(CreateInvoice::class)
 ```
 
-## Edit Page
+No direct HTTP testing of Filament pages.
 
-Pass `record` as the model's actual PK value (not `id`):
+---
+
+# 4. Form Interaction Rule
+
+Form input MUST use:
 
 ```php
-public function it_edits_an_invoice(): void
-{
-    $invoice = Invoice::factory()->create([...]);
-
-    Livewire::actingAs($this->user)
-        ->test(EditInvoice::class, [
-            'record' => $invoice->invoice_id,  // ← the custom PK
-            'tenant' => $this->company,
-        ])
-        ->set('data.invoice_status_id', 2)
-        ->call('save')
-        ->assertHasNoFormErrors();
-
-    $this->assertDatabaseHas('invoices', ['invoice_id' => $invoice->invoice_id, 'invoice_status_id' => 2]);
-}
+->set('data.field', value)
 ```
 
-## Delete Action
+Not:
+- fillForm
+- request payload simulation
+- raw HTTP input
+
+---
+
+# 5. Assertion Rule
+
+Tests MUST assert business outcome:
+
+- database state change
+- UI state change
+- form validation error state
+
+NOT framework internals.
+
+---
+
+# 6. Delete Action Rule
+
+Delete actions are tested as UI actions only:
 
 ```php
-public function it_deletes_an_invoice(): void
-{
-    $invoice = Invoice::factory()->create([...]);
-
-    Livewire::actingAs($this->user)
-        ->test(EditInvoice::class, ['record' => $invoice->invoice_id, 'tenant' => $this->company])
-        ->callAction(DeleteAction::class)
-        ->assertRedirect();
-
-    $this->assertDatabaseMissing('invoices', ['invoice_id' => $invoice->invoice_id]);
-}
+->callAction(DeleteAction::class)
 ```
 
-## Multi-Tenancy Isolation
+Outcome MUST be verified via database assertion.
 
-Switch the active tenant when creating records for a second company:
+---
 
-```php
-public function it_only_lists_records_for_current_tenant(): void
-{
-    $companyA = $this->company;
-    $companyB = Company::factory()->create();
+# 7. Multi-tenancy Note
 
-    $recordA = Invoice::factory()->create(['company_id' => $companyA->id, ...]);
+Tenant behavior is NOT owned by this skill.
 
-    Filament::setTenant($companyB, isQuiet: true);
-    $recordB = Invoice::factory()->create(['company_id' => $companyB->id, ...]);
-    Filament::setTenant($companyA, isQuiet: true);
+If multi-tenancy is present:
+- it is assumed to be already configured
+- this skill only validates UI behavior within active tenant context
 
-    Livewire::actingAs($this->user)
-        ->test(ListInvoices::class, ['tenant' => $companyA])
-        ->assertCanSeeTableRecords([$recordA])
-        ->assertCanNotSeeTableRecords([$recordB]);
-}
-```
+---
 
-## Imports Required in Test Files
+# 8. Core Principle
 
-```php
-use Filament\Actions\DeleteAction;
-use Filament\Facades\Filament;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Livewire\Livewire;
-use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
-```
+Filament resource tests verify **what the user sees and does**, not how the system enforces rules internally.
