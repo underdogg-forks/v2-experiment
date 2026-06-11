@@ -58,11 +58,9 @@ class ClientTest extends TestCase
     {
         Livewire::actingAs($this->user)
             ->test(CreateClient::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_name'    => 'Jane',
-                'client_surname' => 'Doe',
-                'client_email'   => 'jane@example.com',
-            ])
+            ->set('data.client_name', 'Jane')
+            ->set('data.client_surname', 'Doe')
+            ->set('data.client_email', 'jane@example.com')
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -80,9 +78,7 @@ class ClientTest extends TestCase
     {
         Livewire::actingAs($this->user)
             ->test(CreateClient::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_name' => null,
-            ])
+            ->set('data.client_name', null)
             ->call('create')
             ->assertHasFormErrors(['client_name' => 'required']);
     }
@@ -95,10 +91,8 @@ class ClientTest extends TestCase
 
         Livewire::actingAs($this->user)
             ->test(EditClient::class, ['record' => $client->client_id, 'tenant' => $this->company])
-            ->fillForm([
-                'client_name'    => 'Updated Name',
-                'client_surname' => 'Updated Surname',
-            ])
+            ->set('data.client_name', 'Updated Name')
+            ->set('data.client_surname', 'Updated Surname')
             ->call('save')
             ->assertHasNoFormErrors();
 

@@ -68,16 +68,14 @@ class InvoiceTest extends TestCase
     {
         Livewire::actingAs($this->user)
             ->test(CreateInvoice::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_id'                => $this->client->client_id,
-                'invoice_group_id'         => $this->invoiceGroup->invoice_group_id,
-                'invoice_date_created'     => now()->toDateString(),
-                'invoice_date_due'         => now()->addDays(30)->toDateString(),
-                'invoice_status_id'        => 1,
-                'invoice_discount_amount'  => 0,
-                'invoice_discount_percent' => 0,
-                'is_read_only'             => false,
-            ])
+            ->set('data.client_id', $this->client->client_id)
+            ->set('data.invoice_group_id', $this->invoiceGroup->invoice_group_id)
+            ->set('data.invoice_date_created', now()->toDateString())
+            ->set('data.invoice_date_due', now()->addDays(30)->toDateString())
+            ->set('data.invoice_status_id', 1)
+            ->set('data.invoice_discount_amount', 0)
+            ->set('data.invoice_discount_percent', 0)
+            ->set('data.is_read_only', false)
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -95,9 +93,7 @@ class InvoiceTest extends TestCase
     {
         Livewire::actingAs($this->user)
             ->test(CreateInvoice::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_id' => null,
-            ])
+            ->set('data.client_id', null)
             ->call('create')
             ->assertHasFormErrors(['client_id' => 'required']);
     }
@@ -114,10 +110,8 @@ class InvoiceTest extends TestCase
 
         Livewire::actingAs($this->user)
             ->test(EditInvoice::class, ['record' => $invoice->invoice_id, 'tenant' => $this->company])
-            ->fillForm([
-                'invoice_status_id' => 2,
-                'invoice_date_due'  => now()->addDays(60)->toDateString(),
-            ])
+            ->set('data.invoice_status_id', 2)
+            ->set('data.invoice_date_due', now()->addDays(60)->toDateString())
             ->call('save')
             ->assertHasNoFormErrors();
 

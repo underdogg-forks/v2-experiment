@@ -73,12 +73,10 @@ class QuoteTest extends TestCase
 
         /* Act */
         $component = Livewire::test(CreateQuote::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_id'          => $this->client->client_id,
-                'invoice_group_id'   => $this->invoiceGroup->invoice_group_id,
-                'quote_date_expires' => now()->addDays(30)->toDateString(),
-                'quote_status_id'    => 1,
-            ])
+            ->set('data.client_id', $this->client->client_id)
+            ->set('data.invoice_group_id', $this->invoiceGroup->invoice_group_id)
+            ->set('data.quote_date_expires', now()->addDays(30)->toDateString())
+            ->set('data.quote_status_id', 1)
             ->call('create');
 
         /* Assert */
@@ -97,9 +95,7 @@ class QuoteTest extends TestCase
 
         /* Act */
         $component = Livewire::test(CreateQuote::class, ['tenant' => $this->company])
-            ->fillForm([
-                'client_id' => null,
-            ])
+            ->set('data.client_id', null)
             ->call('create');
 
         /* Assert */
@@ -121,7 +117,7 @@ class QuoteTest extends TestCase
 
         /* Act */
         $component = Livewire::test(EditQuote::class, ['record' => $quote->quote_id, 'tenant' => $this->company])
-            ->fillForm(['quote_number' => 'QUO-9999'])
+            ->set('data.quote_number', 'QUO-9999')
             ->call('save');
 
         /* Assert */

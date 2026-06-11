@@ -78,12 +78,10 @@ class PaymentTest extends TestCase
 
         /* Act */
         $component = Livewire::test(CreatePayment::class, ['tenant' => $this->company])
-            ->fillForm([
-                'invoice_id'        => $this->invoice->invoice_id,
-                'payment_amount'    => 250.00,
-                'payment_date'      => now()->toDateString(),
-                'payment_method_id' => 1,
-            ])
+            ->set('data.invoice_id', $this->invoice->invoice_id)
+            ->set('data.payment_amount', 250.00)
+            ->set('data.payment_date', now()->toDateString())
+            ->set('data.payment_method_id', 1)
             ->call('create');
 
         /* Assert */
@@ -102,11 +100,9 @@ class PaymentTest extends TestCase
 
         /* Act */
         $component = Livewire::test(CreatePayment::class, ['tenant' => $this->company])
-            ->fillForm([
-                'invoice_id'     => null,
-                'payment_amount' => null,
-                'payment_date'   => null,
-            ])
+            ->set('data.invoice_id', null)
+            ->set('data.payment_amount', null)
+            ->set('data.payment_date', null)
             ->call('create');
 
         /* Assert */
@@ -128,7 +124,7 @@ class PaymentTest extends TestCase
 
         /* Act */
         $component = Livewire::test(EditPayment::class, ['record' => $payment->payment_id, 'tenant' => $this->company])
-            ->fillForm(['payment_amount' => 500.00])
+            ->set('data.payment_amount', 500.00)
             ->call('save');
 
         /* Assert */

@@ -53,10 +53,8 @@ class ProductTest extends TestCase
     public function it_creates_a_product(): void
     {
         Livewire::test(CreateProduct::class, ['tenant' => $this->company])
-            ->fillForm([
-                'product_name'  => 'Test Product',
-                'product_price' => 99.99,
-            ])
+            ->set('data.product_name', 'Test Product')
+            ->set('data.product_price', 99.99)
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -69,10 +67,8 @@ class ProductTest extends TestCase
     public function it_fails_to_create_product_without_required_fields(): void
     {
         Livewire::test(CreateProduct::class, ['tenant' => $this->company])
-            ->fillForm([
-                'product_name'  => null,
-                'product_price' => null,
-            ])
+            ->set('data.product_name', null)
+            ->set('data.product_price', null)
             ->call('create')
             ->assertHasFormErrors([
                 'product_name'  => 'required',
@@ -86,7 +82,7 @@ class ProductTest extends TestCase
         $product = Product::factory()->create(['company_id' => $this->company->id]);
 
         Livewire::test(EditProduct::class, ['record' => $product->product_id, 'tenant' => $this->company])
-            ->fillForm(['product_name' => 'Updated Product'])
+            ->set('data.product_name', 'Updated Product')
             ->call('save')
             ->assertHasNoFormErrors();
 

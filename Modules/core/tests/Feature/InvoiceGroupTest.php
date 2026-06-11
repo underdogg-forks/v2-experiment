@@ -58,19 +58,13 @@ class InvoiceGroupTest extends TestCase
     #[Group('crud')]
     public function it_creates_an_invoice_group(): void
     {
-        /* Arrange */
-        $data = [
-            'company_id'                      => $this->company->id,
-            'invoice_group_name'              => 'Standard Invoices',
-            'invoice_group_identifier_format' => '{YYYY}-{NUM}',
-            'invoice_group_next_id'           => 1,
-            'invoice_group_left_pad'          => 4,
-        ];
-
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateInvoiceGroup::class, ['tenant' => $this->company])
-            ->fillForm($data)
+            ->set('data.invoice_group_name', 'Standard Invoices')
+            ->set('data.invoice_group_identifier_format', '{YYYY}-{NUM}')
+            ->set('data.invoice_group_next_id', 1)
+            ->set('data.invoice_group_left_pad', 4)
             ->call('create');
 
         /* Assert */
@@ -85,12 +79,10 @@ class InvoiceGroupTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateInvoiceGroup::class, ['tenant' => $this->company])
-            ->fillForm([
-                'invoice_group_name'              => null,
-                'invoice_group_identifier_format' => null,
-                'invoice_group_next_id'           => null,
-                'invoice_group_left_pad'          => null,
-            ])
+            ->set('data.invoice_group_name', null)
+            ->set('data.invoice_group_identifier_format', null)
+            ->set('data.invoice_group_next_id', null)
+            ->set('data.invoice_group_left_pad', null)
             ->call('create');
 
         /* Assert */
@@ -115,7 +107,7 @@ class InvoiceGroupTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(EditInvoiceGroup::class, ['record' => $invoiceGroup->invoice_group_id, 'tenant' => $this->company])
-            ->fillForm(['invoice_group_name' => 'New Group'])
+            ->set('data.invoice_group_name', 'New Group')
             ->call('save');
 
         /* Assert */
