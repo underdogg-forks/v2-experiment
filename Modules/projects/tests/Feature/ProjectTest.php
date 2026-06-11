@@ -46,10 +46,8 @@ class ProjectTest extends AbstractCompanyPanelTestCase
     public function it_creates_a_project(): void
     {
         Livewire::test(CreateProject::class, ['tenant' => $this->company])
-            ->fillForm([
-                'project_name' => 'Test Project',
-                'client_id'    => $this->client->client_id,
-            ])
+            ->set('data.project_name', 'Test Project')
+            ->set('data.client_id', $this->client->client_id)
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -62,9 +60,7 @@ class ProjectTest extends AbstractCompanyPanelTestCase
     public function it_fails_to_create_project_without_required_fields(): void
     {
         Livewire::test(CreateProject::class, ['tenant' => $this->company])
-            ->fillForm([
-                'project_name' => null,
-            ])
+            ->set('data.project_name', null)
             ->call('create')
             ->assertHasFormErrors([
                 'project_name' => 'required',
@@ -80,7 +76,7 @@ class ProjectTest extends AbstractCompanyPanelTestCase
         ]);
 
         Livewire::test(EditProject::class, ['record' => $project->project_id, 'tenant' => $this->company])
-            ->fillForm(['project_name' => 'Updated Project'])
+            ->set('data.project_name', 'Updated Project')
             ->call('save')
             ->assertHasNoFormErrors();
 

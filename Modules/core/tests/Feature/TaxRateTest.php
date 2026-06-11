@@ -58,17 +58,11 @@ class TaxRateTest extends TestCase
     #[Group('crud')]
     public function it_creates_a_tax_rate(): void
     {
-        /* Arrange */
-        $data = [
-            'company_id'       => $this->company->id,
-            'tax_rate_name'    => 'VAT 21%',
-            'tax_rate_percent' => 21.0,
-        ];
-
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateTaxRate::class, ['tenant' => $this->company])
-            ->fillForm($data)
+            ->set('data.tax_rate_name', 'VAT 21%')
+            ->set('data.tax_rate_percent', 21.0)
             ->call('create');
 
         /* Assert */
@@ -83,7 +77,8 @@ class TaxRateTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateTaxRate::class, ['tenant' => $this->company])
-            ->fillForm(['tax_rate_name' => null, 'tax_rate_percent' => null])
+            ->set('data.tax_rate_name', null)
+            ->set('data.tax_rate_percent', null)
             ->call('create');
 
         /* Assert */
@@ -100,7 +95,7 @@ class TaxRateTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(EditTaxRate::class, ['record' => $taxRate->tax_rate_id, 'tenant' => $this->company])
-            ->fillForm(['tax_rate_name' => 'New Name'])
+            ->set('data.tax_rate_name', 'New Name')
             ->call('save');
 
         /* Assert */

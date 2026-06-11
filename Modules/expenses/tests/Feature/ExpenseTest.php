@@ -53,13 +53,11 @@ class ExpenseTest extends TestCase
     public function it_creates_an_expense(): void
     {
         Livewire::test(CreateExpense::class, ['tenant' => $this->company])
-            ->fillForm([
-                'expense_number' => 'EXP-0001',
-                'expense_status' => 'draft',
-                'expense_type'   => 'internal',
-                'expensed_at'    => now()->toDateString(),
-                'expense_amount' => 100,
-            ])
+            ->set('data.expense_number', 'EXP-0001')
+            ->set('data.expense_status', 'draft')
+            ->set('data.expense_type', 'internal')
+            ->set('data.expensed_at', now()->toDateString())
+            ->set('data.expense_amount', 100)
             ->call('create')
             ->assertHasNoFormErrors();
 
@@ -72,10 +70,8 @@ class ExpenseTest extends TestCase
     public function it_fails_to_create_expense_without_required_fields(): void
     {
         Livewire::test(CreateExpense::class, ['tenant' => $this->company])
-            ->fillForm([
-                'expense_number' => null,
-                'expense_amount' => null,
-            ])
+            ->set('data.expense_number', null)
+            ->set('data.expense_amount', null)
             ->call('create')
             ->assertHasFormErrors([
                 'expense_number' => 'required',
@@ -89,7 +85,7 @@ class ExpenseTest extends TestCase
         $expense = Expense::factory()->create(['company_id' => $this->company->id]);
 
         Livewire::test(EditExpense::class, ['record' => $expense->id, 'tenant' => $this->company])
-            ->fillForm(['expense_number' => 'EXP-9999'])
+            ->set('data.expense_number', 'EXP-9999')
             ->call('save')
             ->assertHasNoFormErrors();
 

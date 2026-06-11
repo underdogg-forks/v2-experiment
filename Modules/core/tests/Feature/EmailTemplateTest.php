@@ -58,20 +58,15 @@ class EmailTemplateTest extends TestCase
     #[Group('crud')]
     public function it_creates_an_email_template(): void
     {
-        /* Arrange */
-        $data = [
-            'email_template_title'      => 'Invoice Reminder',
-            'email_template_type'       => 'invoice',
-            'email_template_subject'    => 'Your invoice is ready',
-            'email_template_from_name'  => 'Billing Team',
-            'email_template_from_email' => 'billing@example.com',
-            'email_template_body'       => 'Please find your invoice attached.',
-        ];
-
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateEmailTemplate::class, ['tenant' => $this->company])
-            ->fillForm($data)
+            ->set('data.email_template_title', 'Invoice Reminder')
+            ->set('data.email_template_type', 'invoice')
+            ->set('data.email_template_subject', 'Your invoice is ready')
+            ->set('data.email_template_from_name', 'Billing Team')
+            ->set('data.email_template_from_email', 'billing@example.com')
+            ->set('data.email_template_body', 'Please find your invoice attached.')
             ->call('create');
 
         /* Assert */
@@ -89,11 +84,9 @@ class EmailTemplateTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(CreateEmailTemplate::class, ['tenant' => $this->company])
-            ->fillForm([
-                'email_template_title' => null,
-                'email_template_type'  => null,
-                'email_template_body'  => null,
-            ])
+            ->set('data.email_template_title', null)
+            ->set('data.email_template_type', null)
+            ->set('data.email_template_body', null)
             ->call('create');
 
         /* Assert */
@@ -114,7 +107,7 @@ class EmailTemplateTest extends TestCase
         /* Act */
         $component = Livewire::actingAs($this->user)
             ->test(EditEmailTemplate::class, ['record' => $emailTemplate->email_template_id, 'tenant' => $this->company])
-            ->fillForm(['email_template_title' => 'New Title'])
+            ->set('data.email_template_title', 'New Title')
             ->call('save');
 
         /* Assert */
