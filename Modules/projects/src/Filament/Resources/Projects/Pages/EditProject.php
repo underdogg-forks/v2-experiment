@@ -4,7 +4,9 @@ namespace Modules\Projects\Filament\Resources\Projects\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Projects\Filament\Resources\Projects\ProjectResource;
+use Modules\Projects\Services\ProjectService;
 
 class EditProject extends EditRecord
 {
@@ -15,5 +17,10 @@ class EditProject extends EditRecord
         return [
             DeleteAction::make(),
         ];
+    }
+
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        return app(ProjectService::class)->updateProject($record, $data);
     }
 }

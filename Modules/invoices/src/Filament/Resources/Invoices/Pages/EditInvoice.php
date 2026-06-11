@@ -4,7 +4,9 @@ namespace Modules\Invoices\Filament\Resources\Invoices\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Invoices\Filament\Resources\Invoices\InvoiceResource;
+use Modules\Invoices\Services\InvoiceService;
 
 class EditInvoice extends EditRecord
 {
@@ -15,5 +17,10 @@ class EditInvoice extends EditRecord
         return [
             DeleteAction::make(),
         ];
+    }
+
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        return app(InvoiceService::class)->updateInvoice($record, $data);
     }
 }
