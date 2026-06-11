@@ -1,73 +1,67 @@
+---
+name: factory-contract-system
+description: Ensures factories generate valid model instances aligned with database schema constraints
+---
+
 # Factory Contract System
 
 ## Purpose
 
-Ensure factories always represent valid domain state aligned with database constraints.
+Ensures factories produce valid database-ready model instances.
 
 ---
 
-## Core Rule
+## Scope
 
-A factory MUST never generate invalid database records.
+Factories MUST:
 
-If a column is NOT NULL:
-- it MUST be present in the factory default state
-
----
-
-## 1. Schema Awareness
-
-Factories MUST be updated whenever:
-
-- migrations add a NOT NULL column
-- columns are renamed
-- constraints are tightened
+- satisfy all NOT NULL columns
+- reflect migration constraints
+- produce valid default state for persistence
 
 ---
 
-## 2. Minimum Valid Entity Rule
+## Ownership Boundary
 
-Each factory defines the smallest valid version of an entity.
+Factories do NOT:
 
-It is not a “random data generator”.
-
-It is a “valid domain constructor”.
-
----
-
-## 3. Service Alignment
-
-Factories MUST align with service-layer creation logic.
-
-If service requires a field → factory must provide it.
-
-Mismatch is a defect.
+- enforce business rules
+- define validation rules
+- replace service-layer creation logic
+- define seeder logic
 
 ---
 
-## 4. Seeder Dependency Rule
+## Schema Alignment Rule
 
-Seeders MUST ONLY use factories that already produce valid state.
+If a migration introduces a NOT NULL column:
 
-Seeders are not responsible for fixing factory deficiencies.
-
----
-
-## 5. Drift Detection
-
-This skill activates when:
-
-- SQLSTATE NOT NULL errors occur
-- factories are modified
-- migrations introduce constraints
-- seeders fail in CI
+- factory MUST be updated immediately
+- omission is considered invalid state
 
 ---
 
-## 6. Validation Principle
+## Minimum Valid State
 
-If a factory cannot generate a valid model without overrides:
+Each factory represents the smallest valid persisted entity.
 
-- factory is incomplete
-- not the test
-- not the service
+Not random data.
+Not business scenarios.
+Only valid schema state.
+
+---
+
+## Service Alignment
+
+Factories SHOULD align with service-layer expectations but do NOT depend on it.
+
+Service layer = behavior
+Factory = valid structure
+
+---
+
+## Seeder Rule
+
+Seeders depend on factories.
+
+Factories MUST NOT depend on seeders.
