@@ -37,12 +37,13 @@ Must be replaceable and contain no business logic.
 
 ---
 
-# 2. Service Rules
+## 2. Service Rules
 
-- Business logic lives in services
-- No HTTP/Filament logic in services
-- DTOs required for input/output
-- No facades in services
+- Business logic lives in services.
+- Services must remain framework-agnostic except for Laravel infrastructure (Eloquent, DB transactions, HTTP client, logging).
+- No Filament classes or UI concerns inside services.
+- DTOs are used for external API boundaries only.
+- Form submissions may pass validated arrays directly to services.
 
 ---
 
