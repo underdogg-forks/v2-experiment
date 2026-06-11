@@ -1,76 +1,72 @@
-# CI Schema Invariant Gate
+---
+name: ci-schema-gate
+description: Ensures correct execution order of migrations, seeders, and tests in CI
+---
+
+# CI Schema Gate
 
 ## Purpose
 
-Prevent schema-related failures before tests run.
+Enforces correct execution order of database setup and test execution in CI.
 
 ---
 
-## Step 1 — Fresh State Validation
+# 1. Execution Order (Strict)
 
-CI MUST execute:
+CI MUST run in this order:
 
 ```bash
 php artisan migrate:fresh --seed
-```
-
-This ensures:
-- migrations are valid
-- seeders are valid
-- factories produce valid state
-
----
-
-## Step 2 — Schema Integrity Check
-
-After seeding:
-
-- ensure no SQLSTATE errors occurred
-- ensure all required fields were satisfied
-- ensure no silent DB coercion issues exist
-
----
-
-## Step 3 — Test Execution
-
-Only after schema is clean:
-
-```bash
 php artisan test
 ```
 
----
-
-## Step 4 — Failure Classification
-
-If failure occurs:
-
-### Migration failure
-→ schema is invalid
-
-### Seeder failure
-→ factory or data contract is invalid
-
-### Test failure
-→ behavior or expectation is invalid
+No deviations allowed.
 
 ---
 
-## Step 5 — Rule of Truth
+# 2. Responsibility
 
-- Database defines truth of structure
-- Factories define truth of creation
-- Tests define truth of behavior
+This skill ONLY controls:
 
-All three MUST agree before merge.
+- execution sequencing
+- CI pipeline ordering
+- ensuring seed runs before tests
+
+It does NOT validate:
+- schema correctness
+- factory correctness
+- business logic correctness
+
+These are handled by other skills.
 
 ---
 
-## Result
+# 3. Failure Behavior
 
-This gate ensures:
+If CI fails:
 
-- no hidden NOT NULL surprises
-- no CI-only schema failures
-- no factory drift
-- no silent production divergence
+- migrations failing → schema issue (handled by test-honesty)
+- seed failing → factory/data issue (handled by test-honesty)
+- tests failing → behavior issue (handled by test layer)
+
+CI does NOT interpret or classify failures.
+
+---
+
+# 4. Determinism Requirement
+
+Test execution MUST always run on a fresh database state created by:
+
+```bash
+migrate:fresh --seed
+```
+
+No cached or partial state is allowed.
+
+---
+
+# 5. Core Principle
+
+CI defines execution order only.
+
+It does not define correctness of the system.
