@@ -16,16 +16,20 @@ It orchestrates existing skills to produce a complete pull request review.
 This reviewer MUST delegate evaluation to existing skills:
 
 ## Architecture
-Use:
+
+Delegate to:
+
 - application-architecture-standard
 - service-layer
-- non-standard-pks
 - laravel-modules
+- non-standard-pks
+- dto-contract
+- safe-refactoring-rules
 
 ## Tests
 Use:
-- filament-resource-testing
-- test-honesty
+- filament-resource-testing skill
+- test-honesty skill
 
 ## Security
 Use:
@@ -109,6 +113,22 @@ Copy/paste code only
 - Do NOT duplicate test philosophy definitions
 - Only report deviations
 - Keep output strictly diagnostic
+
+---
+
+# Prioritization
+
+Report issues in this order:
+
+1. Production bugs
+2. Security issues
+3. Data integrity risks
+4. Test honesty violations
+5. Architecture violations
+6. Maintainability improvements
+7. Cosmetic suggestions
+
+Never allow style issues to obscure correctness issues.
 
 ---
 
