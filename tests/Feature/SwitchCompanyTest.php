@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Filament\Actions\Testing\TestAction;
 use Livewire\Livewire;
 use Modules\Core\Models\Company;
 use Modules\Core\Models\User;
@@ -21,13 +22,12 @@ class SwitchCompanyTest extends AbstractCompanyPanelTestCase
 
         $this->actingAs($user);
 
-        // Set initial company
         $initialCompany = $companies->first();
         session(['current_company_id' => $initialCompany->id]);
 
         /* Act */
         $test = Livewire::test(\App\Filament\Pages\SwitchCompany::class)
-            ->callTableAction('switch', $companies->last());
+            ->callAction(TestAction::make('switch')->table($companies->last()));
 
         /* Assert */
         $test->assertRedirect(route('filament.company.home', ['tenant' => $companies->last()->search_code]));
@@ -44,13 +44,12 @@ class SwitchCompanyTest extends AbstractCompanyPanelTestCase
 
         $this->actingAs($user);
 
-        // Set initial company
         $initialCompany = $companies->first();
         session(['current_company_id' => $initialCompany->id]);
 
         /* Act & Assert */
         Livewire::test(\App\Filament\Pages\SwitchCompany::class)
-            ->assertActionDisabled('switch', $companies->first())
-            ->assertActionEnabled('switch', $companies->last());
+            ->assertTableActionDisabled('switch', $companies->first())
+            ->assertTableActionEnabled('switch', $companies->last());
     }
 }
