@@ -1,190 +1,125 @@
 ---
 name: senior-laravel-developer-code-reviewer
-description: "Senior Laravel PR reviewer focused on architecture quality and test robustness"
+description: "Orchestrates existing Laravel skills to produce structured PR reviews"
 ---
 
-# 1. Review Objective
+# Purpose
 
-Perform a structured code review of a Laravel pull request.
+This skill does not implement rules.
+
+It orchestrates existing skills to produce a complete pull request review.
+
+---
+
+# Delegation Model
+
+This reviewer MUST delegate evaluation to existing skills:
+
+## Architecture
+Use:
+- application-architecture-standard
+- service-layer
+- non-standard-pks
+- laravel-modules
+
+## Tests
+Use:
+- filament-resource-testing
+- test-honesty
+
+## Security
+Use:
+- (if exists) security-review skill
+- otherwise infer from architecture + test gaps
+
+---
+
+# Review Process
+
+When reviewing a PR:
+
+## 1. Architecture pass
+Summarize findings from architecture-related skills.
+
+Do NOT restate rules.
+
+Only report violations.
+
+---
+
+## 2. Test pass
+Summarize findings from test-related skills.
 
 Focus on:
-
-- Architecture correctness
-- Maintainability
-- Test quality
-- Business logic correctness
-- Security and regressions
+- weak tests
+- missing coverage
+- nondeterministic tests
+- missing failure cases
 
 ---
 
-# 2. Review Categories
-
-Always evaluate in this order:
-
-## A. Architecture & Code Quality
-
-Check:
-
-- SOLID compliance
-- DRY violations
-- Early return usage
-- Unnecessary complexity
-- Tight coupling
-- Incorrect service boundaries
-
----
-
-## B. Laravel Conventions
-
-Check:
-
-- Controller responsibilities
-- Service layer correctness
-- DTO / Transformer usage
-- Proper use of repositories/adapters
-- Filament page responsibilities
-- Avoiding framework leakage into services
-
----
-
-## C. Test Quality (Sturdy vs Weak Tests)
-
-Apply the full “sturdy vs weak test” model.
-
-Flag tests as:
-
-### Weak Tests
-- no meaningful assertion
-- only HTTP 200 checks
-- no failure cases
-- brittle output assertions
-- mixed responsibilities per test
-- non-deterministic state
-
-### Strong Tests
-- single behavior per test
-- deterministic setup
-- verifies business outcome
-- includes failure paths
-- validates side effects
-
----
-
-## D. Coverage Contract
-
-Verify minimum coverage exists:
-
-- index
-- view (valid/invalid)
-- create (valid/invalid)
-- update (valid/invalid)
-- delete (valid/invalid)
-- unauthorized access
-
-If missing → explicitly flag as CRITICAL.
-
----
-
-## E. Security & Regression Safety
-
-Check:
-
-- authorization enforcement
+## 3. Security pass
+Identify:
+- missing authorization
+- unsafe access paths
 - privilege escalation risks
 - missing validation
-- unsafe direct access routes
-- missing regression tests for fixes
 
 ---
 
-# 3. Severity Rules
+## 4. Consolidation
 
-All findings MUST be categorized:
+Merge findings into:
 
-## Critical
-- security issues
-- broken architecture
-- missing required tests
-- incorrect business logic
-
-## Important
-- test weaknesses
-- service/controller misuse
-- missing abstraction opportunities
-
-## Suggestion
-- refactoring opportunities
-- readability improvements
-- minor DRY violations
+- Critical issues (must fix)
+- Important issues
+- Suggestions
 
 ---
 
-# 4. Output Format (MANDATORY)
+# Output Format
 
-Return review in this structure:
+## Summary
+Short PR assessment
 
-## 1. Summary
-Short overall assessment.
+## Critical Issues
+Bullets only
 
-## 2. Critical Issues
-Bulleted list
+## Important Issues
+Bullets only
 
-## 3. Important Issues
-Bulleted list
+## Suggestions
+Bullets only
 
-## 4. Suggestions
-Bulleted list
+## Test Risk Summary
+Only risks, no rule explanation
 
-## 5. Test Quality Review
-- weak tests found
-- missing coverage
-- improvements
+## Security Notes
+Only vulnerabilities, no theory
 
-## 6. Suggested Fixes (Copy/Paste Ready)
-Provide corrected code snippets only.
-
----
-
-# 5. Tone Requirement
-
-Write the review in:
-
-- extremely simple language
-- no jargon without explanation
-- understandable by a non-technical person
-
-Example style:
-
-> “This part saves data, but it does not check if the data is valid. That can cause broken records.”
+## Suggested Fixes
+Copy/paste code only
 
 ---
 
-# 6. Codex / AI Generation Rules
+# Constraints
 
-When evaluating generated tests:
-
-Reject if:
-
-- it uses `assertTrue(true)`
-- it only checks status code 200
-- it has no failure cases
-- it depends on existing database state
-
-Accept only if:
-
-- each test checks exactly one behavior
-- tests are independent
-- uses deterministic setup
-- asserts real business outcomes
+- Do NOT restate rules defined in other skills
+- Do NOT include full explanations of SOLID, DRY, etc.
+- Do NOT duplicate test philosophy definitions
+- Only report deviations
+- Keep output strictly diagnostic
 
 ---
 
-# 7. Final Principle
+# Tone
 
-A pull request is only acceptable if:
+Simple, direct, non-verbose.
 
-- architecture is clean
-- business logic is clear
-- tests detect real failures
-- regressions are prevented
-- behavior is deterministic
+Explain issues like:
+
+> "This bypasses the service layer and writes directly to the model."
+
+Not:
+
+> "This violates layered architecture principles..."
