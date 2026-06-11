@@ -140,4 +140,35 @@ DTOs MAY be skipped when:
 
 DTOs are **explicit data contracts**, not business logic containers.
 
+## IDE Hints (Optional)
+
+DTOs MAY include region markers to improve IDE navigation (e.g. PhpStorm folding).
+
+These are purely cosmetic and MUST NOT affect runtime behavior or architecture decisions.
+
+Example:
+
+```php
+class InvoiceDto
+{
+    #region Properties
+    private int $invoiceId;
+    private int $companyId;
+    private float $amount;
+    #endregion
+
+    #region Getters
+    public function getInvoiceId(): int { ... }
+    public function getCompanyId(): int { ... }
+    public function getAmount(): float { ... }
+    #endregion
+
+    #region Setters
+    public function setInvoiceId(int $invoiceId): self { ... }
+    public function setCompanyId(int $companyId): self { ... }
+    public function setAmount(float $amount): self { ... }
+    #endregion
+}
+```
+
 They exist to stabilize data shape across the system, not to introduce unnecessary abstraction.
