@@ -9,6 +9,7 @@
 .env*
 !.env.example
 !.env.testing.example
+!.env.ci
 /storage/*.key
 
 # Laravel – Modules (ignored generated sources)
