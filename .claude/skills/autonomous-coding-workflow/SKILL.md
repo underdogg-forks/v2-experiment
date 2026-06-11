@@ -28,21 +28,15 @@ Before modifying code:
 
 1. Read existing implementation.
 2. Understand current behavior.
-
-3. Search for existing abstractions before introducing new ones.
-
-Prefer reusing:
-
-- Traits
-- Base test cases
-- Base resources
-- Base seeders
-- Existing services
-- Existing DTOs
-- Existing transformers
-
-Only introduce a new abstraction if no suitable one exists.
-4. Identify existing abstractions and reuse them.
+3. Identify existing abstractions and reuse them:
+   - Traits
+   - Base test cases
+   - Base resources
+   - Base seeders
+   - Services
+   - DTOs
+   - Transformers
+4. Search explicitly for duplication before introducing new abstractions.
 5. Preserve existing architectural patterns.
 
 Do not modify code that has not been understood.
