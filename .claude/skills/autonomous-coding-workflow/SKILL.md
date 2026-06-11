@@ -82,17 +82,15 @@ Never proceed if any of the following fail:
 
 - PHPUnit tests
 - Static analysis
-- PHP syntax check (`php -l`)
-- Code style violations
+- PHP syntax check (php -l)
+- Code style (Pint)
 
-Before considering a task complete:
+Before completion, additionally ensure:
 
-- migrate:fresh --seed must succeed
-- smoke tests must succeed
-- targeted tests must succeed
-- full suite must succeed (unless explicitly skipped by the user)
-
-The repository must remain in a working state at all times.
+- migrate:fresh --seed passes
+- smoke tests pass
+- targeted tests pass
+- full suite passes (unless explicitly excluded)
 
 ---
 
