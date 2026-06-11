@@ -1,64 +1,77 @@
 ---
 name: test-honesty
-description: Ensures test, factory, seeder, and schema consistency with production reality
+description: Ensures factory, seeder, and schema alignment with production database reality
 ---
 
 # Purpose
 
-Prevents schema drift and invalid test assumptions.
+Prevents schema drift between migrations, factories, and seeders.
 
 ---
 
 # 1. Schema Contract
 
-Every NOT NULL column must be represented in:
-- factory
-- service create path
-- or explicit validation test
+Every NOT NULL column defined in migrations must be supported by:
+
+- factory definition
+- or seeder definition (only for seed data)
+- or explicit DB default in migration
+
+This is a **schema-only rule**, not a validation rule.
 
 ---
 
 # 2. Factory Rule
 
-Factories must always produce valid database state.
+Factories MUST produce valid database rows for the schema.
 
-No missing required fields.
+Factories are schema-aligned, not business-logic aware.
 
 ---
 
 # 3. Seeder Rule
 
-Seeders must reflect production-valid data.
+Seeders MUST only insert schema-valid data.
 
-No reliance on implicit DB defaults.
+No reliance on implicit database defaults.
 
 ---
 
-# 4. Database Parity
+# 4. Database Parity Rule
 
-Production DB = MySQL / MariaDB reference.
+MySQL / MariaDB is the canonical database.
 
-SQLite differences are invalid for schema logic.
+SQLite differences are invalid for schema validation assumptions.
 
 ---
 
 # 5. Drift Triggers
 
+The following indicate schema drift:
+
 - migration changes
-- factory updates
-- SQLSTATE errors
-- CI vs local mismatch
+- factory mismatch
+- seeder mismatch
+- SQLSTATE constraint violations
+- CI vs local DB mismatch
 
 ---
 
-# 6. Identity Drift Rule
+# 6. Identity Rule
 
-Do not assume IDs are deterministic.
+Primary keys are non-deterministic.
 
-Never assert hardcoded primary keys.
+Tests MUST NOT rely on hardcoded IDs.
 
 ---
 
-# 7. Smoke Validation
+# 7. Execution Rule (CI boundary)
 
-migrate:fresh + seed is required before CI tests.
+Schema validation requires:
+
+- migrate:fresh
+- seed
+
+before running test suites.
+
+This ensures schema correctness before test execution.
