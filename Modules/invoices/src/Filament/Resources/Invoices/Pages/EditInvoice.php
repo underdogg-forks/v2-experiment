@@ -19,6 +19,13 @@ class EditInvoice extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['invoice_terms'] ??= '';
+
+        return $data;
+    }
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         return app(InvoiceService::class)->updateInvoice($record, $data);

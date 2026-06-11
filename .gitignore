@@ -22,6 +22,7 @@ Modules/**/Http/Requests/
 /livewire-tmp/
 /public/assets/
 /public/build/
+!/public/build/manifest.json
 /public/css/
 /public/hot/
 /public/js/

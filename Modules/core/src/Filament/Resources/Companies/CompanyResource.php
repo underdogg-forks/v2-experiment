@@ -16,6 +16,8 @@ use Modules\Core\Models\Company;
 
 class CompanyResource extends Resource
 {
+    protected static bool $isScopedToTenant = false;
+
     protected static ?string $tenantOwnershipRelationshipName = null;
 
     protected static ?string $model = Company::class;

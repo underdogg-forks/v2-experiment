@@ -11,6 +11,13 @@ class CreateProduct extends CreateRecord
 {
     protected static string $resource = ProductResource::class;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['product_description'] ??= '';
+
+        return $data;
+    }
+
     protected function handleRecordCreation(array $data): Model
     {
         return app(ProductService::class)->createProduct($data);
