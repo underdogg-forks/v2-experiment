@@ -6,80 +6,114 @@ Perform repository-wide modifications safely, incrementally, and with continuous
 
 ---
 
-## Preparation
+## 1. Instruction Precedence
+
+Before doing anything:
+
+- Check for repository-level instruction files:
+  - `.github/copilot-instructions.md`
+  - `AGENTS.md`
+  - `.junie/*.md`
+  - `CLAUDE.md`
+
+If they exist:
+- Treat them as higher precedence for architecture and conventions.
+- Avoid duplicating rules already defined there.
+
+---
+
+## 2. Preparation
 
 Before modifying code:
 
-1. Read the existing implementation.
-2. Understand the current behavior.
-3. Identify existing abstractions that can be reused.
+1. Read existing implementation.
+2. Understand current behavior.
+3. Identify existing abstractions and reuse them.
 4. Preserve existing architectural patterns.
 
 Do not modify code that has not been understood.
 
 ---
 
-## Incremental Development
+## 3. Refactoring Heuristics
 
-Complete work in small logical steps.
+Apply only when relevant:
+
+- If repeated patterns exist across many test classes, models, or resources, evaluate abstraction opportunities.
+- Prefer centralizing duplicated logic into:
+  - Traits
+  - Base classes
+  - Services
+- Do not introduce abstraction unless duplication is confirmed.
+
+---
+
+## 4. Incremental Development
+
+Work in small, verifiable steps.
 
 After each change:
 
-1. Verify compilation.
-2. Execute targeted tests.
-3. Resolve failures.
-4. Run Laravel Pint.
-5. Continue only when the repository is in a clean state.
+1. Verify syntax:
+   ```bash
+   php -l
+   ```
+2. Run targeted tests.
+3. Fix failures immediately.
+4. Run code style checks:
+   ```bash
+   vendor/bin/pint --dirty --format agent
+   ```
+5. Continue only if repository is clean.
 
 ---
 
-## Validation
+## 5. Validation Gates
 
-Never continue after introducing failing tests.
+Never proceed if any of the following fail:
 
-Never ignore:
+- PHPUnit tests
+- Static analysis
+- PHP syntax check (`php -l`)
+- Code style violations
 
-- PHPUnit failures
-- Static analysis failures
-- Syntax errors
-- Formatting violations
-
-The repository must remain in a working state throughout the refactoring process.
+The repository must remain in a working state at all times.
 
 ---
 
-## Module Completion
+## 6. Module Completion
 
 After completing a module:
 
-1. Execute the targeted test suite.
-2. Run Laravel Pint.
-3. Verify that no unintended changes exist.
-4. Create a commit describing the completed module.
+1. Run targeted test suite.
+2. Run `php -l`.
+3. Run Pint.
+4. Confirm no unintended changes.
+5. Commit with clear module description.
 
-Do not begin the next module until the current module is complete.
+Do not start the next module until the current one is fully stable.
 
 ---
 
-## Uncertainty
+## 7. Uncertainty Handling
 
-If the required behavior cannot be determined with high confidence:
+If behavior is unclear:
 
 - Stop immediately.
-- Explain the ambiguity.
+- Describe ambiguity.
 - Request clarification.
-- Do not guess implementation details.
+- Do not infer or guess missing business rules.
 
 ---
 
-## Success Criteria
+## 8. Success Criteria
 
 The task is complete only when:
 
-- Existing behavior is preserved.
-- No duplicate logic has been introduced.
-- The transformation is idempotent.
-- All targeted tests pass.
-- The full test suite passes.
-- Code formatting complies with project standards.
-- No unnecessary architectural changes have been introduced.
+- Behavior is preserved.
+- No duplicate logic introduced.
+- Changes are idempotent.
+- All tests pass.
+- Full suite passes.
+- Formatting is clean.
+- No unintended architectural drift occurred.
