@@ -1,54 +1,89 @@
 # Safe Refactoring Rules
 
-## Goal
+## Purpose
 
-Perform safe, deterministic refactoring while preserving existing behavior and architecture.
+Ensure all refactoring is deterministic, non-breaking, and behavior-preserving.
+
+This skill enforces *how changes are made*, not *how the system is structured*.
 
 ---
 
-## Existing Methods
+# 1. Behavior Preservation
+
+- Never change runtime behavior unless explicitly instructed.
+- Any refactoring must preserve observable outputs.
+- Moving code between layers must not alter execution results.
+
+---
+
+# 2. Existing Code Respect
 
 - Never overwrite an existing method if it already satisfies part of the requirement.
 - Extend existing implementations instead of replacing them.
-- Preserve existing business logic unless explicitly instructed otherwise.
+- Do not delete or rewrite working logic unless required for a fix.
 
 ---
 
-## Constructor Injection
+# 3. Dependency Integrity
 
 - Always preserve constructor injection.
-- Never replace dependency injection with `app()`, `resolve()`, or facades unless explicitly requested.
-- Do not introduce new dependencies when existing ones can be reused.
+- Never replace dependency injection with service locators (`app()`, `resolve()`).
+- Do not introduce new dependencies when existing ones suffice.
+- Do not change dependency graphs without explicit intent.
 
 ---
 
-## Public API Stability
+# 4. Public API Stability
 
-- Never modify public method signatures unless every call site is updated within the same change.
-- Avoid introducing breaking changes.
-- Prefer extending internal behavior instead of changing public contracts.
+- Never change public method signatures unless all call sites are updated in the same change.
+- Avoid breaking changes at all costs.
+- Prefer internal adaptation over external contract modification.
 
 ---
 
-## Idempotent Refactoring
+# 5. Idempotency Requirement
 
 - Refactoring must be idempotent.
-- Running the same transformation twice must produce no additional modifications.
-- Never introduce duplicate methods, imports, traits, or logic.
+- Running the same change twice must produce no further diff.
+- No duplicate logic, imports, traits, or methods may be introduced.
 
 ---
 
-## Behavior Preservation
+# 6. Uncertainty Handling
 
-- Do not change runtime behavior unless explicitly requested.
-- Architectural improvements must preserve observable behavior.
-- Moving logic between classes must not alter execution.
+If any of the following is unclear:
+
+- intended behavior
+- service contract
+- domain rule
+- expected output
+
+Then:
+
+- Stop immediately
+- Do not guess
+- Report ambiguity explicitly
+- Request clarification
 
 ---
 
-## Unknown Contracts
+# 7. Scope Discipline
 
-- If the intended behavior cannot be inferred from existing code, stop immediately.
-- Never invent business rules.
-- Never guess missing service contracts.
-- Report ambiguities and request clarification instead.
+This skill does NOT define:
+
+- architecture layering (handled by application-architecture-standard)
+- testing strategy (handled by test-honesty / filament-resource-testing)
+- security rules (handled separately if present)
+
+It ONLY defines safe transformation rules.
+
+---
+
+# 8. Enforcement Priority
+
+If this skill conflicts with others:
+
+1. application-architecture-standard
+2. domain-specific skills
+3. execution workflows
+4. this skill (always subordinate to architecture)
