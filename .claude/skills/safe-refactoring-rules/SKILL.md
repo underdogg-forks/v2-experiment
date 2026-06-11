@@ -67,7 +67,25 @@ Then:
 
 ---
 
-# 7. Scope Discipline
+# 7. Existing Abstractions
+
+Before introducing:
+
+- Trait
+- Service
+- DTO
+- Transformer
+- Base class
+
+Search for an existing implementation.
+
+Reuse existing abstractions whenever practical.
+
+Duplicate abstractions are architectural defects.
+
+---
+
+# 8. Scope Discipline
 
 This skill does NOT define:
 
@@ -79,7 +97,7 @@ It ONLY defines safe transformation rules.
 
 ---
 
-# 8. Enforcement Priority
+# 9. Enforcement Priority
 
 If this skill conflicts with others:
 
