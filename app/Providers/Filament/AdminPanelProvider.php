@@ -23,7 +23,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->viteTheme('resources/css/filament/admin/nord.css')
+            ->when( ! app()->runningUnitTests(), fn (Panel $panel) => $panel->viteTheme('resources/css/filament/admin/nord.css'))
             ->login(\App\Filament\Pages\Auth\Login::class)
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

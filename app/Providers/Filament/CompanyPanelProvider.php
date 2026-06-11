@@ -31,7 +31,7 @@ class CompanyPanelProvider extends PanelProvider
         return $panel
             ->id('company')
             ->path('')
-            ->viteTheme('resources/css/filament/company/nord.css')
+            ->when( ! app()->runningUnitTests(), fn (Panel $panel) => $panel->viteTheme('resources/css/filament/company/nord.css'))
             ->login(Login::class)
             ->registration()
             ->passwordReset()
