@@ -67,7 +67,11 @@ Then:
 
 ---
 
-# 7. Existing Abstractions
+# 7. Abstraction Reuse Rule (Local Scope Only)
+
+This skill only enforces reuse during refactoring operations.
+
+Global abstraction policy is defined in application-architecture-standard.
 
 Before introducing:
 
