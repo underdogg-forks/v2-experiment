@@ -1,104 +1,64 @@
 ---
 name: abstract-seeder
-description: "Creates module seeders using the AbstractSeeder pattern. Activates when adding a new seeder, extending AbstractSeeder, using findOrCreate* helpers, or when the user mentions seeders, seeding data, AbstractSeeder, buildOne, or callWith."
-license: MIT
-metadata:
-  author: project
+description: Provides structured seeding workflow for module data initialization
 ---
 
-# AbstractSeeder Pattern
+# Abstract Seeder
 
-## Location
+## Purpose
 
-`Modules\Core\Database\Seeders\AbstractSeeder`
+Provides a structured way to seed database data per module.
 
-All module seeders extend this class. Never extend Laravel's `Seeder` directly
-for per-company data — use `AbstractSeeder`.
+---
 
-## Minimal Seeder
+## Scope
 
-```php
-namespace Modules\Clients\Database\Seeders;
+Seeders are responsible for:
 
-use Modules\Clients\Models\Client;
-use Modules\Core\Database\Seeders\AbstractSeeder;
+- creating initial dataset for a company
+- using factories to generate valid records
+- orchestrating dependency order between models
 
-class ClientsSeeder extends AbstractSeeder
-{
-    protected string $label = 'Clients';      // shown in progress bar
-    protected int $defaultCount = 15;         // used when count not passed
+---
 
-    protected function buildOne(): void
-    {
-        Client::factory()->create(['company_id' => $this->companyId]);
-    }
-}
-```
+## Ownership Boundary
 
-## With FK Dependencies
+Seeders MUST NOT:
 
-Use `findOrCreate*` helpers — they resolve dependencies lazily, only creating
-records if none exist for the company:
+- define validation rules
+- define factory structure
+- enforce schema constraints
+- contain business logic
 
-```php
-protected function buildOne(): void
-{
-    $client = $this->findOrCreateClient($this->companyId);
-    $group  = $this->findOrCreateInvoiceGroup($this->companyId);
-    $user   = $this->findOrCreateUser($this->companyId);
+---
 
-    Invoice::factory()->create([
-        'company_id'       => $this->companyId,
-        'client_id'        => $client->client_id,
-        'invoice_group_id' => $group->invoice_group_id,
-        'user_id'          => $user->user_id,
-    ]);
-}
-```
+## Factory Dependency Rule
 
-## Available findOrCreate* Helpers
+Seeders MUST rely on factories for object creation.
 
-| Method | Returns | Creates via |
-|--------|---------|-------------|
-| `findOrCreateClient($companyId)` | `Client` | `Client::factory()` |
-| `findOrCreateInvoiceGroup($companyId)` | `InvoiceGroup` | `InvoiceGroup::factory()` |
-| `findOrCreateExpenseCategory($companyId)` | `ExpenseCategory` | `ExpenseCategory::factory()` |
-| `findOrCreateInvoice($companyId)` | `Invoice` | `Invoice::factory()` + deps |
-| `findOrCreateProduct($companyId)` | `Product` | `Product::factory()` |
-| `findOrCreateFamily($companyId)` | `Family` | `Family::factory()` |
-| `findOrCreateTaxRate($companyId)` | `TaxRate` | `TaxRate::factory()` |
-| `findOrCreateProject($companyId)` | `Project` | `Project::factory()` + client |
-| `findOrCreateTask($companyId)` | `Task` | `Task::factory()` + project |
-| `findOrCreateUser($companyId)` | `User` | `User::factory()` + attach to company |
+Factories are the source of truth for valid model state.
 
-## State Hooks
+---
 
-```php
-protected function beforeSeed(): void
-{
-    // runs once before the loop — use for counters/state resets
-    $this->adminsRemaining = 2;
-}
+## Dependency Resolution
 
-protected function afterSeed(): void
-{
-    // runs once after the loop — use for cleanup/summary
-}
-```
+Seeders MAY resolve dependencies using helper methods:
 
-## Calling from DatabaseSeeder
+- findOrCreateClient
+- findOrCreateProject
+- findOrCreateUser
 
-```php
-$this->callWith(InvoicesSeeder::class, [
-    'company' => $company->id,
-    'count'   => 25,
-]);
-```
+These helpers are convenience utilities, not business logic.
 
-The `run(int $company, int $count)` signature maps directly to these keys.
-`company` is required — the seeder skips with a warning if it's missing.
+---
 
-## Available Properties Inside buildOne()
+## Execution Hooks
 
-- `$this->companyId` — the current company's id
-- `$this->count` — total records to seed (for conditional logic)
+- beforeSeed(): setup state
+- afterSeed(): cleanup or summary
+
+---
+
+## Principle
+
+Seeders assemble data. They do not define data correctness.
