@@ -1,101 +1,64 @@
-# Test Honesty
+---
+name: test-honesty
+description: Ensures test, factory, seeder, and schema consistency with production reality
+---
 
-## Purpose
+# Purpose
 
-Ensure tests, factories, seeders, and database schema remain aligned with production reality.
-
-This skill prevents:
-- schema drift
-- false-positive test suites
-- invalid factory-generated state
-- hidden MySQL vs SQLite inconsistencies
+Prevents schema drift and invalid test assumptions.
 
 ---
 
-## 1. Schema Contract Enforcement
+# 1. Schema Contract
 
-Every NOT NULL column MUST be represented in:
-
-- factory default state
-- service-layer creation path
+Every NOT NULL column must be represented in:
+- factory
+- service create path
 - or explicit validation test
 
-If none exist → system is invalid.
+---
+
+# 2. Factory Rule
+
+Factories must always produce valid database state.
+
+No missing required fields.
 
 ---
 
-## 2. Factory Contract Rule
+# 3. Seeder Rule
 
-Factories MUST always produce valid database state.
+Seeders must reflect production-valid data.
 
-- No missing NOT NULL fields
-- No reliance on optional DB defaults
-- No conditional omissions unless domain explicitly allows null
-
-Factories represent the “minimum valid entity”.
+No reliance on implicit DB defaults.
 
 ---
 
-## 3. Seeder Integrity Rule
+# 4. Database Parity
 
-Seeders MUST reflect production-valid data.
+Production DB = MySQL / MariaDB reference.
 
-- No missing required fields
-- No implicit DB coercion reliance
-- Must pass on MySQL without SQLite differences
+SQLite differences are invalid for schema logic.
 
 ---
 
-## 4. Database Engine Parity
+# 5. Drift Triggers
 
-Test environment MUST match production database behavior.
-
-- SQLite divergence is not acceptable for schema-sensitive systems
-- MySQL behavior is the reference
-
----
-
-## 5. Drift Detection Triggers
-
-This skill activates when:
-
-- migrations change columns
-- factories are added/modified
-- seeders change
-- SQLSTATE errors appear
-- CI differs from local behavior
+- migration changes
+- factory updates
+- SQLSTATE errors
+- CI vs local mismatch
 
 ---
 
-## 6. Required Smoke Validation (optional but recommended)
+# 6. Identity Drift Rule
 
-Before commit:
+Do not assume IDs are deterministic.
 
-- migrate:fresh
-- seed
-- run full test suite
-
-This is a safety net, not a replacement for proper tests.
+Never assert hardcoded primary keys.
 
 ---
 
-## 7. Failure Interpretation
+# 7. Smoke Validation
 
-If a NOT NULL violation occurs:
-
-- missing factory attribute OR
-- missing service validation OR
-- incomplete test coverage
-
-Never assume database is wrong.
-
-The code is always wrong first.
-
----
-
-## 8. Enforcement Priority
-
-1. application-architecture-standard
-2. test-honesty
-3. domain-specific skills
-4. execution workflow
+migrate:fresh + seed is required before CI tests.
