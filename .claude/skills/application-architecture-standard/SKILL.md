@@ -42,8 +42,8 @@ Must be replaceable and contain no business logic.
 - Business logic lives in services.
 - Services must remain framework-agnostic except for Laravel infrastructure (Eloquent, DB transactions, HTTP client, logging).
 - No Filament classes or UI concerns inside services.
-- DTOs are used for external API boundaries only.
-- Form submissions may pass validated arrays directly to services.
+- DTOs are used for structured data transfer where transformation, validation, or reuse is required.
+- They are optional for internal service calls when validated arrays are sufficient.
 
 ---
 
