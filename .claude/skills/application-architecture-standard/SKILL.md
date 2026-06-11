@@ -1,54 +1,151 @@
-# Laravel Architecture Standards
+---
+name: application-architecture-standard
+description: "Defines the structural rules for Laravel application architecture, layering, and code organization"
+---
 
-## Goal
+# Purpose
 
-Maintain a consistent, scalable Laravel architecture that emphasizes reuse, separation of concerns, and maintainability.
+This skill defines the authoritative rules for how Laravel applications must be structured.
+
+It is the single source of truth for:
+
+- architecture boundaries
+- layering rules
+- code organization
+- abstraction decisions
+- service responsibilities
 
 ---
 
-## Dependency Reuse
+# 1. Layering Rules
 
-- Reuse existing DTOs, Transformers, Services, Repositories, and Adapters whenever possible.
-- Never replace typed objects with arrays when a DTO already exists.
-- Prefer extending existing abstractions over creating new ones.
+The application MUST follow strict layering:
 
----
+## Presentation Layer
+- Controllers
+- Filament Pages
+- Form Requests (validation only)
 
-## Duplicate Logic
-
-- Avoid duplicated implementations.
-- Extract shared behavior into reusable abstractions when appropriate.
-- Prefer Traits or dedicated Services over copy-pasted logic.
-
----
-
-## Control Flow
-
-- Prefer early returns.
-- Minimize nesting.
-- Keep methods focused on a single responsibility.
+Rules:
+- No business logic allowed
+- Only orchestration and input/output handling
 
 ---
 
-## Service Layer
+## Application Layer
+- Services
+- DTOs
+- Transformers
+- Application workflows
 
-- Business logic belongs in Services.
-- Framework lifecycle logic belongs in Controllers, Filament Pages, Commands, Jobs, or Listeners.
-- Infrastructure concerns must not leak into business Services.
-
----
-
-## SOLID Principles
-
-- Maintain single responsibility.
-- Reduce coupling between classes.
-- Prefer composition over duplication.
-- Introduce abstractions only when they provide meaningful value.
+Rules:
+- Contains all business logic
+- Must not depend on UI layer (Filament, Controllers)
+- Must not contain framework-specific logic unless required for contracts
 
 ---
 
-## Existing Architecture
+## Domain Layer
+- Models
+- Core business rules inside models (only if unavoidable)
+- Value objects (if used)
 
-- Follow the existing architectural patterns of the project.
-- Extend existing components before introducing new ones.
-- Keep naming conventions and project structure consistent with surrounding code.
+Rules:
+- Models represent state and invariants
+- No HTTP, no Filament, no persistence logic outside ORM
+
+---
+
+## Infrastructure Layer
+- API clients
+- External services
+- Repositories (if used)
+- Queue integrations
+
+Rules:
+- Must be replaceable
+- Must not contain business logic
+- Must be hidden behind interfaces or adapters
+
+---
+
+# 2. Service Layer Rules
+
+- Services are the ONLY place for business logic orchestration
+- Services must not contain framework-specific code
+- Services must use DTOs and Transformers for input/output
+- Services must not be aware of HTTP, Filament, or request lifecycle
+
+---
+
+# 3. Abstraction Rules
+
+## When to abstract
+- Repeated logic appears in 2+ places
+- A concept has a clear single responsibility
+- A change would otherwise require multiple edits
+
+## When NOT to abstract
+- Single-use logic
+- Premature optimization
+- Unstable or unclear domain behavior
+
+---
+
+# 4. Duplication Control
+
+- Never duplicate business logic across services
+- Never copy validation logic into services (keep in Form Requests or Validators)
+- Never duplicate transformation logic (use Transformers only)
+
+---
+
+# 5. Primary Key Integrity
+
+- Never assume `id`
+- Always use model-defined primary keys
+- All services MUST respect domain-specific identifiers
+
+---
+
+# 6. Dependency Rules
+
+- Use constructor injection only
+- Never use `app()` or service locators inside business logic
+- No facades inside services unless explicitly justified
+
+---
+
+# 7. Framework Boundaries
+
+Laravel / Filament rules:
+
+- Filament handles UI only
+- Controllers handle HTTP only
+- Services handle business logic only
+- Models handle data representation only
+
+No cross-layer leakage is allowed.
+
+---
+
+# 8. Refactoring Safety
+
+All architectural changes must:
+
+- preserve behavior
+- avoid breaking public interfaces
+- be idempotent
+- not introduce duplicate logic
+
+If behavior is unclear → stop immediately.
+
+---
+
+# 9. Enforcement Priority
+
+If conflicts exist:
+
+1. This skill (application architecture)
+2. Domain-specific skills (filament, modules, auth)
+3. Execution workflows
