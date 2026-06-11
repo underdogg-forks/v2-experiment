@@ -19,6 +19,13 @@ class EditPayment extends EditRecord
         ];
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['payment_note'] ??= '';
+
+        return $data;
+    }
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         return app(PaymentService::class)->updatePayment($record, $data);

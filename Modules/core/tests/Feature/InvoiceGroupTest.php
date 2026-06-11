@@ -145,7 +145,9 @@ class InvoiceGroupTest extends TestCase
         /* Arrange */
         $companyB = Company::factory()->create();
         InvoiceGroup::factory()->create(['company_id' => $this->company->id, 'invoice_group_name' => 'VISIBLE_GROUP']);
+        Filament::setTenant($companyB, isQuiet: true);
         InvoiceGroup::factory()->create(['company_id' => $companyB->id, 'invoice_group_name' => 'HIDDEN_GROUP']);
+        Filament::setTenant($this->company, isQuiet: true);
 
         /* Act */
         $component = Livewire::actingAs($this->user)
