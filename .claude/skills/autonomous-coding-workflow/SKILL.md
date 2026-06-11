@@ -28,8 +28,22 @@ Before modifying code:
 
 1. Read existing implementation.
 2. Understand current behavior.
-3. Identify existing abstractions and reuse them.
-4. Preserve existing architectural patterns.
+
+3. Search for existing abstractions before introducing new ones.
+
+Prefer reusing:
+
+- Traits
+- Base test cases
+- Base resources
+- Base seeders
+- Existing services
+- Existing DTOs
+- Existing transformers
+
+Only introduce a new abstraction if no suitable one exists.
+4. Identify existing abstractions and reuse them.
+5. Preserve existing architectural patterns.
 
 Do not modify code that has not been understood.
 
@@ -76,6 +90,13 @@ Never proceed if any of the following fail:
 - Static analysis
 - PHP syntax check (`php -l`)
 - Code style violations
+
+Before considering a task complete:
+
+- migrate:fresh --seed must succeed
+- smoke tests must succeed
+- targeted tests must succeed
+- full suite must succeed (unless explicitly skipped by the user)
 
 The repository must remain in a working state at all times.
 
