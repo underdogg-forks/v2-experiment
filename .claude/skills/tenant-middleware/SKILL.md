@@ -71,3 +71,19 @@ Livewire::actingAs($this->user)
     ->callAction('switch', ['company_id' => $otherCompany->id])
     ->assertRedirect(route('filament.company.home', ['tenant' => $otherCompany->search_code]));
 ```
+
+
+## Single Source of Truth
+
+Tenant resolution belongs exclusively in the tenant middleware chain.
+
+Controllers, Resources, Pages, Services, and Models must never independently
+resolve the active tenant from the request, session, or URL.
+
+They must rely on:
+
+- Filament::getTenant()
+- injected Company model
+- resolved route parameter
+
+Duplicating tenant resolution logic is an architectural defect.
