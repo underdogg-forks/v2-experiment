@@ -137,3 +137,26 @@ protected function setUp(): void
     $this->user->companies()->syncWithoutDetaching([$this->company->id]);
 }
 ```
+
+## Services
+
+Services must never assign company_id themselves when operating inside the
+Filament company panel.
+
+company_id is supplied by:
+
+- TenantAware
+- BaseResource
+- explicit caller input
+
+Services should only normalize or validate incoming values.
+
+Hardcoding tenant assignment inside services creates hidden coupling.
+
+
+## Fix-One-Fix-All
+
+If one tenant-aware resource requires adjustment,
+review every tenant-aware resource for the same pattern.
+
+Tenant scoping inconsistencies are data isolation defects.
