@@ -87,3 +87,10 @@ They must rely on:
 - resolved route parameter
 
 Duplicating tenant resolution logic is an architectural defect.
+
+## Fix-One-Fix-All
+
+If one middleware requires modification due to a tenant resolution bug,
+review all three tenant middlewares for equivalent logic and consistency.
+
+Tenant resolution behavior must remain uniform across the entire middleware chain.
