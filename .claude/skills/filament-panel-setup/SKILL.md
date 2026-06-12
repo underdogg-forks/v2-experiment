@@ -79,3 +79,26 @@ The admin panel enables SPA mode for fast navigation:
 
 Do NOT add SPA mode to the company panel — it causes issues with tenant middleware
 and full-page redirects required for company switching.
+
+## Panel Responsibilities
+
+Panels configure:
+
+- authentication
+- navigation
+- resources
+- middleware
+- appearance
+
+Panels must not contain business logic.
+
+Business logic belongs in services.
+
+---
+
+## Resource Registration
+
+If one module registers resources via discoverResources(),
+all modules should follow the same convention.
+
+Avoid mixing manual registration and discovery.
