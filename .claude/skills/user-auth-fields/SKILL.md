@@ -80,3 +80,36 @@ public function getFilamentName(): string
     return $this->user_name ?? $this->user_email ?? 'User';
 }
 ```
+
+---
+
+## Authentication Queries
+
+Never query using:
+
+email
+name
+password
+
+Always use:
+
+user_email
+user_name
+user_password
+
+including:
+
+- validation rules
+- login logic
+- factories
+- tests
+- seeders
+- authentication providers
+
+---
+
+## Fix-One-Fix-All
+
+If one occurrence of `email`, `name`, or `password` is corrected to the
+application's custom fields, search for equivalent usages throughout the
+repository and update them consistently.
