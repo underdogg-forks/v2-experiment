@@ -117,3 +117,33 @@ They do NOT have cross-company access.
 
 The Spatie permission guard is `web`. Always pass `guard_name: 'web'` when creating
 roles/permissions programmatically.
+
+---
+
+## Authorization
+
+Never authorize based on role strings directly when a policy,
+permission, or helper method already exists.
+
+Prefer:
+
+- can()
+- policies
+- helper methods
+- enum methods
+
+over repeated role checks.
+
+Duplicate authorization logic is a security risk.
+
+---
+
+## Enum Rule
+
+Never compare:
+
+'user_role' == 'admin'
+
+Always compare against:
+
+UserRole::ADMIN->value
