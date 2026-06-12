@@ -164,3 +164,24 @@ No errors, failures, warnings, risky tests, or deprecations detected.
 ## Objective
 
 Minimize token usage while preserving **100% of the information required to diagnose failing tests**. Output must be stable, deterministic, compact, and optimized for consumption by both humans and AI systems.
+
+---
+
+## Root Cause Analysis
+
+When multiple tests fail with the same underlying exception,
+identify the earliest failure that explains subsequent failures.
+
+Do not propose independent fixes for cascading failures.
+
+Prefer fixing one root cause over many symptoms.
+
+---
+
+## Architectural Diagnosis
+
+When a failure indicates a missing architectural pattern
+(e.g. missing service, missing transaction, missing CoversClass,
+missing failure-path tests, missing factory field),
+
+recommend applying the fix repository-wide rather than only to the failing test.
