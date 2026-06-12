@@ -12,6 +12,7 @@ class FamilyFactory extends Factory
     public function definition(): array
     {
         return [
+            'company_id'  => \Modules\Core\Models\Company::factory(),
             'family_name' => fake()->words(2, true),
         ];
     }
