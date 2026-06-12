@@ -99,3 +99,33 @@ public function invoiceGroups(): HasMany
     return $this->hasMany(InvoiceGroup::class, 'company_id', 'id');
 }
 ```
+
+---
+
+## Never Assume "id"
+
+Never access:
+
+$model->id
+
+Never reference:
+
+'id'
+
+unless the model explicitly uses a standard primary key.
+
+Use:
+
+$model->getKey()
+
+or the named primary key property.
+
+---
+
+## Fix-One-Fix-All
+
+If one test, factory, seeder, relationship, resource, or service incorrectly
+uses `id` instead of the model's primary key, search the repository for the
+same pattern and correct all occurrences.
+
+Primary key assumptions tend to fail systematically rather than individually.
